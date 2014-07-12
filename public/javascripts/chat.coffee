@@ -1,4 +1,4 @@
-name = '&lt;anon&gt;'
+name = ''
 
 htmlEntities = (string) ->
 	String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -61,7 +61,25 @@ $ ->
 		yes
 
 	socket.on 'game', (data) ->
-		console.log('GAME ON!')
+		if data.command
+			command = data.command
+			switch command
+				when 'update-board'
+					players = data.players
+					for index, player of players
+						$player = $("#player-#{index}")
+						console.log($player)
+						$playerPanel = $player.find('.panel')
+						$playerTitle = $player.find('.panel-title')
+						$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
+						$playerCredits = $player.find('.credits')
+
+						$playerPanel.removeClass('panel-default').addClass('panel-primary')
+						$playerTitle.html(player.name)
+						$playerCards[0].prop('src', player.cards[0])
+						$playerCards[1].prop('src', player.cards[1])
+						$playerCredits.html("#{player.credits} Credits")
+					console.log(players)
 
 	joinGame = ->
 		if $username.val() is ''
@@ -69,7 +87,12 @@ $ ->
 		else
 			name = htmlEntities($username.val())
 			$name.html(name)
-			socket.emit('send', {message: "<em>#{name} just joined the game</em>"})
+			player =
+				name: name
+				cards: ['/images/card_face_down.png', '/images/card_face_down.png']
+				credits: 2
+			socket.emit('send', {message: "<em>#{name} joined the game</em>"})
+			socket.emit('play', {command: 'join-game', player: player})
 			$joinGame.collapse('hide')
 			$startGame.collapse('show')
 		yes
@@ -114,5 +137,6 @@ $ ->
 		yes
 
 	$username.trigger('focus')
+	socket.emit('play', {command: 'reset-game'})
 
 	return
