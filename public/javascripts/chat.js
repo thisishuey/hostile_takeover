@@ -31,7 +31,7 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $username, $window, joinGame, logs, sendMessage, socket, windowFocus;
+  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $username, $window, joinGame, logs, sendMessage, socket, startGame, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(window.location.origin);
@@ -39,6 +39,8 @@ $(function() {
   $joinGame = $('#join-game');
   $username = $('#username');
   $joinButton = $('#join');
+  $startGame = $('#start-game');
+  $startButton = $('#start');
   $playGame = $('#play-game');
   $content = $('#content');
   $name = $('#name');
@@ -77,6 +79,9 @@ $(function() {
     }
     return true;
   });
+  socket.on('game', function(data) {
+    return console.log('GAME ON!');
+  });
   joinGame = function() {
     if ($username.val() === '') {
       alert('Please enter your name!');
@@ -84,11 +89,10 @@ $(function() {
       name = htmlEntities($username.val());
       $name.html(name);
       socket.emit('send', {
-        message: "<em>" + name + " just joined the chat</em>"
+        message: "<em>" + name + " just joined the game</em>"
       });
       $joinGame.collapse('hide');
-      $playGame.collapse('show');
-      $field.trigger('focus');
+      $startGame.collapse('show');
     }
     return true;
   };
@@ -102,6 +106,19 @@ $(function() {
     }
     return true;
   });
+  startGame = function() {
+    socket.emit('play', {
+      command: 'start-game'
+    });
+    $startGame.collapse('hide');
+    $playGame.collapse('show');
+    $field.trigger('focus');
+    return true;
+  };
+  $startButton.on('click', function(event) {
+    startGame();
+    return true;
+  });
   sendMessage = function() {
     var text;
     if ($field.val() === '') {
@@ -113,6 +130,7 @@ $(function() {
         message: text
       });
       $field.val('');
+      $field.trigger('focus');
     }
     return true;
   };

@@ -25,8 +25,11 @@ io.sockets.on('connection', function(socket) {
   socket.emit('message', {
     message: 'Welcome to <strong>Hostile Takeover</strong>!'
   });
-  return socket.on('send', function(data) {
+  socket.on('send', function(data) {
     return io.sockets.emit('message', data);
+  });
+  return socket.on('play', function(data) {
+    return io.sockets.emit('game', data);
   });
 });
 

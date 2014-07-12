@@ -1,0 +1,11 @@
+#content {
+	height: 200px;
+	overflow-y: auto;
+	color: #4F124C;
+}
+
+.credits {
+	margin-top: 15px;
+	font-weight: bold;
+	text-align: center;
+}

@@ -16,5 +16,7 @@ io.sockets.on 'connection', (socket) ->
 	socket.emit('message', {message: 'Welcome to <strong>Hostile Takeover</strong>!'})
 	socket.on 'send', (data) ->
 		io.sockets.emit('message', data)
+	socket.on 'play', (data) ->
+		io.sockets.emit('game', data)
 
 console.log("Listening on port #{port}")

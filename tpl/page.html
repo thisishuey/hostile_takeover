@@ -2,16 +2,126 @@
 <html>
 	<head>
 		<title>Hostile Takeover</title>
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/default.css">
+		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+		<link rel="stylesheet" href="/stylesheets/default.css">
 	</head>
 	<body>
 		<div class="container">
+			<div class="page-header">
+				<h1>Hostile Takeover</h1>
+			</div>
+			<div class="row" id="roster">
+				<div class="col-sm-2" id="player-0">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 1</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" id="player-1">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 2</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" id="player-2">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 3</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" id="player-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 4</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" id="player-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 5</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2" id="player-5">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Player 6</h2>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-0">
+								</div>
+								<div class="col-xs-6">
+									<img src="/images/card_blank.png" class="img-responsive card-1">
+								</div>
+							</div>
+							<div class="credits">0 Credits</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div id="join-game" class="collapse in">
 				<div class="text-center">
-					<div class="page-header">
-						<h1>Welcome to Hostile Takeover!</h1>
-					</div>
 					<p>This is the game of Hostile Takeover. You can join the game using the form below.</p>
 				</div>
 				<div class="form-horizontal">
@@ -20,22 +130,33 @@
 							<div class="input-group">
 								<input type="text" class="form-control" id="username" placeholder="Enter Your Name">
 								<div class="input-group-btn">
-									<input type="button" class="btn btn-success" id="join" value="Join Game">
+									<input type="button" class="btn btn-primary" id="join" value="Join Game">
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div id="start-game" class="collapse">
+				<div class="form-horizontal">
+					<div class="form-group">
+						<div class="col-sm-offset-3 col-sm-6 text-right">
+							<input type="button" class="btn btn-primary" id="start" value="Start Game">
+						</div>
+					</div>
+				</div>
+			</div>
 			<div id="play-game" class="collapse">
-				<div id="content"></div>
+				<div class="panel panel-primary">
+					<div class="panel-body" id="content"></div>
+				</div>
 				<div class="form-horizontal">
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-6">
 							<div class="input-group">
 								<input type="text" class="form-control" id="field" placeholder="Enter Your Message">
 								<div class="input-group-btn">
-									<input type="button" class="btn btn-success" id="send" value="Send Message">
+									<input type="button" class="btn btn-primary" id="send" value="Send Message">
 								</div>
 							</div>
 						</div>
@@ -43,9 +164,9 @@
 				</div>
 			</div>
 		</div>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+		<script src="/javascripts/bootstrap.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="/chat.js"></script>
+		<script src="/javascripts/chat.js"></script>
 	</body>
 </html>

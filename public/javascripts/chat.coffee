@@ -26,6 +26,8 @@ $ ->
 	$joinGame = $('#join-game')
 	$username = $('#username')
 	$joinButton = $('#join')
+	$startGame = $('#start-game')
+	$startButton = $('#start')
 	$playGame = $('#play-game')
 	$content = $('#content')
 	$name = $('#name')
@@ -58,16 +60,18 @@ $ ->
 			console.log("There is a problem: #{data}")
 		yes
 
+	socket.on 'game', (data) ->
+		console.log('GAME ON!')
+
 	joinGame = ->
 		if $username.val() is ''
 			alert('Please enter your name!')
 		else
 			name = htmlEntities($username.val())
 			$name.html(name)
-			socket.emit('send', {message: "<em>#{name} just joined the chat</em>"})
+			socket.emit('send', {message: "<em>#{name} just joined the game</em>"})
 			$joinGame.collapse('hide')
-			$playGame.collapse('show')
-			$field.trigger('focus')
+			$startGame.collapse('show')
 		yes
 
 	$joinButton.on 'click', (event) ->
@@ -79,6 +83,17 @@ $ ->
 			joinGame()
 		yes
 
+	startGame = ->
+		socket.emit('play', {command: 'start-game'})
+		$startGame.collapse('hide')
+		$playGame.collapse('show')
+		$field.trigger('focus')
+		yes
+
+	$startButton.on 'click', (event) ->
+		startGame()
+		yes
+
 	sendMessage = ->
 		if $field.val() is ''
 			alert('Please enter a message!')
@@ -86,6 +101,7 @@ $ ->
 			text = htmlEntities($field.val())
 			socket.emit('send', {username: name, message: text})
 			$field.val('')
+			$field.trigger('focus')
 		yes
 
 	$sendButton.on 'click', (event) ->
