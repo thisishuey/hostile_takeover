@@ -43,7 +43,7 @@ $ ->
 		windowFocus = no
 		yes
 
-	socket.on 'message', (data) ->
+	socket.on 'message', (data = {}) ->
 		if data.message
 			logs.push(data)
 			username = if data.username then data.username else 'Server'
@@ -60,34 +60,37 @@ $ ->
 			console.log("There is a problem: #{data}")
 		yes
 
-	socket.on 'game', (data) ->
-		if data.command
-			command = data.command
-			switch command
-				when 'update-board'
-					players = data.players
+	socket.on 'game:start', (data = {}) ->
+		$startGame.collapse('hide')
+		$playGame.collapse('show')
+		$field.trigger('focus')
+		yes
 
-					for playerIndex, player of players
-						$player = $("#player-#{playerIndex}")
-						$playerPanel = $player.find('.panel')
-						$playerTitle = $player.find('.panel-title')
-						$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
-						$playerCredits = $player.find('.credits')
+	socket.on 'board:update', (data = {}) ->
+		if data.players
+			players = data.players
 
-						$playerPanel.prop('class', 'panel panel-default')
-						$playerTitle.html(player.name)
-						for cardIndex, card of player.cards
-							$playerCards[cardIndex].prop('src', card)
-						$playerCredits.html("#{player.credits} Credits")
+			for playerIndex, player of players
+				$player = $("#player-#{playerIndex}")
+				$playerPanel = $player.find('.panel')
+				$playerTitle = $player.find('.panel-title')
+				$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
+				$playerCredits = $player.find('.credits')
 
-					if players.length < 2
-						$startButton.prop('disabled', yes)
-					else
-						$startButton.prop('disabled', no)
+				$playerPanel.prop('class', 'panel panel-default')
+				$playerTitle.html(player.name)
+				for cardIndex, card of player.cards
+					$playerCards[cardIndex].prop('src', card)
+				$playerCredits.html("#{player.credits} Credits")
 
-				when 'start-game'
-					startGame()
+			if data.active
+				$player = $("#player-#{data.active}")
+				$player.prop('class', 'panel panel-primary')
 
+			if players.length < 2
+				$startButton.prop('disabled', yes)
+			else
+				$startButton.prop('disabled', no)
 
 	joinGame = ->
 		if $username.val() is ''
@@ -96,7 +99,7 @@ $ ->
 			name = htmlEntities($username.val())
 			$name.html(name)
 			socket.emit('send', {message: "<em>#{name} joined the game</em>"})
-			socket.emit('play', {command: 'join-game', name: name})
+			socket.emit('game:join', {name: name})
 			$joinGame.collapse('hide')
 			$startGame.collapse('show')
 		yes
@@ -110,16 +113,8 @@ $ ->
 			joinGame()
 		yes
 
-	startGame = ->
-		# socket.emit('play', {command: 'start-game'})
-		$startGame.collapse('hide')
-		$playGame.collapse('show')
-		$field.trigger('focus')
-		yes
-
 	$startButton.on 'click', (event) ->
-		socket.emit('play', {command: 'start-game'})
-		# startGame()
+		socket.emit('game:start')
 		yes
 
 	sendMessage = ->
@@ -142,6 +137,6 @@ $ ->
 		yes
 
 	$username.trigger('focus')
-	socket.emit('play', {command: 'reset-game'})
+	socket.emit('game:reset')
 
 	return

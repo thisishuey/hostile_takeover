@@ -31,7 +31,7 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $username, $window, joinGame, logs, sendMessage, socket, startGame, windowFocus;
+  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $username, $window, joinGame, logs, sendMessage, socket, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(window.location.origin);
@@ -57,6 +57,9 @@ $(function() {
   });
   socket.on('message', function(data) {
     var $message, text, username;
+    if (data == null) {
+      data = {};
+    }
     if (data.message) {
       logs.push(data);
       username = data.username ? data.username : 'Server';
@@ -79,37 +82,46 @@ $(function() {
     }
     return true;
   });
-  socket.on('game', function(data) {
-    var $player, $playerCards, $playerCredits, $playerPanel, $playerTitle, card, cardIndex, command, player, playerIndex, players, _ref;
-    if (data.command) {
-      command = data.command;
-      switch (command) {
-        case 'update-board':
-          players = data.players;
-          for (playerIndex in players) {
-            player = players[playerIndex];
-            $player = $("#player-" + playerIndex);
-            $playerPanel = $player.find('.panel');
-            $playerTitle = $player.find('.panel-title');
-            $playerCards = [$player.find('.card-0'), $player.find('.card-1')];
-            $playerCredits = $player.find('.credits');
-            $playerPanel.prop('class', 'panel panel-default');
-            $playerTitle.html(player.name);
-            _ref = player.cards;
-            for (cardIndex in _ref) {
-              card = _ref[cardIndex];
-              $playerCards[cardIndex].prop('src', card);
-            }
-            $playerCredits.html("" + player.credits + " Credits");
-          }
-          if (players.length < 2) {
-            return $startButton.prop('disabled', true);
-          } else {
-            return $startButton.prop('disabled', false);
-          }
-          break;
-        case 'start-game':
-          return startGame();
+  socket.on('game:start', function(data) {
+    if (data == null) {
+      data = {};
+    }
+    $startGame.collapse('hide');
+    $playGame.collapse('show');
+    $field.trigger('focus');
+    return true;
+  });
+  socket.on('board:update', function(data) {
+    var $player, $playerCards, $playerCredits, $playerPanel, $playerTitle, card, cardIndex, player, playerIndex, players, _ref;
+    if (data == null) {
+      data = {};
+    }
+    if (data.players) {
+      players = data.players;
+      for (playerIndex in players) {
+        player = players[playerIndex];
+        $player = $("#player-" + playerIndex);
+        $playerPanel = $player.find('.panel');
+        $playerTitle = $player.find('.panel-title');
+        $playerCards = [$player.find('.card-0'), $player.find('.card-1')];
+        $playerCredits = $player.find('.credits');
+        $playerPanel.prop('class', 'panel panel-default');
+        $playerTitle.html(player.name);
+        _ref = player.cards;
+        for (cardIndex in _ref) {
+          card = _ref[cardIndex];
+          $playerCards[cardIndex].prop('src', card);
+        }
+        $playerCredits.html("" + player.credits + " Credits");
+      }
+      if (data.active) {
+        $player = $("#player-" + data.active);
+        $player.prop('class', 'panel panel-primary');
+      }
+      if (players.length < 2) {
+        return $startButton.prop('disabled', true);
+      } else {
+        return $startButton.prop('disabled', false);
       }
     }
   });
@@ -122,8 +134,7 @@ $(function() {
       socket.emit('send', {
         message: "<em>" + name + " joined the game</em>"
       });
-      socket.emit('play', {
-        command: 'join-game',
+      socket.emit('game:join', {
         name: name
       });
       $joinGame.collapse('hide');
@@ -141,16 +152,8 @@ $(function() {
     }
     return true;
   });
-  startGame = function() {
-    $startGame.collapse('hide');
-    $playGame.collapse('show');
-    $field.trigger('focus');
-    return true;
-  };
   $startButton.on('click', function(event) {
-    socket.emit('play', {
-      command: 'start-game'
-    });
+    socket.emit('game:start');
     return true;
   });
   sendMessage = function() {
@@ -179,7 +182,5 @@ $(function() {
     return true;
   });
   $username.trigger('focus');
-  socket.emit('play', {
-    command: 'reset-game'
-  });
+  socket.emit('game:reset');
 });
