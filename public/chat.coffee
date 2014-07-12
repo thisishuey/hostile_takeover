@@ -60,7 +60,7 @@ $ ->
 
 	joinGame = ->
 		if $username.val() is ''
-			alert('Please type your name!')
+			alert('Please enter your name!')
 		else
 			name = htmlEntities($username.val())
 			$name.html(name)
@@ -80,8 +80,8 @@ $ ->
 		yes
 
 	sendMessage = ->
-		if name is ''
-			alert('Please type your name!')
+		if $field.val() is ''
+			alert('Please enter a message!')
 		else
 			text = htmlEntities($field.val())
 			socket.emit('send', {username: name, message: text})

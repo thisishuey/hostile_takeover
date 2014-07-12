@@ -79,7 +79,7 @@ $(function() {
   });
   joinGame = function() {
     if ($username.val() === '') {
-      alert('Please type your name!');
+      alert('Please enter your name!');
     } else {
       name = htmlEntities($username.val());
       $name.html(name);
@@ -104,8 +104,8 @@ $(function() {
   });
   sendMessage = function() {
     var text;
-    if (name === '') {
-      alert('Please type your name!');
+    if ($field.val() === '') {
+      alert('Please enter a message!');
     } else {
       text = htmlEntities($field.val());
       socket.emit('send', {
