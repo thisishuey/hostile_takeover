@@ -31,12 +31,17 @@ io.sockets.on('connection', function(socket) {
     return io.sockets.emit('message', data);
   });
   return socket.on('play', function(data) {
-    var command, player;
+    var command, name, player;
     if (data.command) {
       command = data.command;
       switch (command) {
         case 'join-game':
-          player = data.player;
+          name = data.name;
+          player = {
+            name: name,
+            cards: ['/images/card_face_down.png', '/images/card_face_down.png'],
+            credits: 2
+          };
           players.push(player);
           return io.sockets.emit('game', {
             command: 'update-board',

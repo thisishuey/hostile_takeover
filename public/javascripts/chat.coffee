@@ -66,20 +66,28 @@ $ ->
 			switch command
 				when 'update-board'
 					players = data.players
-					for index, player of players
-						$player = $("#player-#{index}")
-						console.log($player)
+
+					for playerIndex, player of players
+						$player = $("#player-#{playerIndex}")
 						$playerPanel = $player.find('.panel')
 						$playerTitle = $player.find('.panel-title')
 						$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
 						$playerCredits = $player.find('.credits')
 
-						$playerPanel.removeClass('panel-default').addClass('panel-primary')
+						$playerPanel.prop('class', 'panel panel-default')
 						$playerTitle.html(player.name)
-						$playerCards[0].prop('src', player.cards[0])
-						$playerCards[1].prop('src', player.cards[1])
+						for cardIndex, card of player.cards
+							$playerCards[cardIndex].prop('src', card)
 						$playerCredits.html("#{player.credits} Credits")
-					console.log(players)
+
+					if players.length < 2
+						$startButton.prop('disabled', yes)
+					else
+						$startButton.prop('disabled', no)
+
+				when 'start-game'
+					startGame()
+
 
 	joinGame = ->
 		if $username.val() is ''
@@ -87,12 +95,8 @@ $ ->
 		else
 			name = htmlEntities($username.val())
 			$name.html(name)
-			player =
-				name: name
-				cards: ['/images/card_face_down.png', '/images/card_face_down.png']
-				credits: 2
 			socket.emit('send', {message: "<em>#{name} joined the game</em>"})
-			socket.emit('play', {command: 'join-game', player: player})
+			socket.emit('play', {command: 'join-game', name: name})
 			$joinGame.collapse('hide')
 			$startGame.collapse('show')
 		yes
@@ -107,14 +111,15 @@ $ ->
 		yes
 
 	startGame = ->
-		socket.emit('play', {command: 'start-game'})
+		# socket.emit('play', {command: 'start-game'})
 		$startGame.collapse('hide')
 		$playGame.collapse('show')
 		$field.trigger('focus')
 		yes
 
 	$startButton.on 'click', (event) ->
-		startGame()
+		socket.emit('play', {command: 'start-game'})
+		# startGame()
 		yes
 
 	sendMessage = ->

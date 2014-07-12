@@ -24,7 +24,11 @@ io.sockets.on 'connection', (socket) ->
 			command = data.command
 			switch command
 				when 'join-game'
-					player = data.player
+					name = data.name
+					player =
+						name: name
+						cards: ['/images/card_face_down.png', '/images/card_face_down.png']
+						credits: 2
 					players.push(player)
 					io.sockets.emit('game', {command: 'update-board', players: players})
 				when 'reset-game'

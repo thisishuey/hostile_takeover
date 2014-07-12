@@ -80,48 +80,51 @@ $(function() {
     return true;
   });
   socket.on('game', function(data) {
-    var $player, $playerCards, $playerCredits, $playerPanel, $playerTitle, command, index, player, players;
+    var $player, $playerCards, $playerCredits, $playerPanel, $playerTitle, card, cardIndex, command, player, playerIndex, players, _ref;
     if (data.command) {
       command = data.command;
       switch (command) {
         case 'update-board':
           players = data.players;
-          for (index in players) {
-            player = players[index];
-            $player = $("#player-" + index);
-            console.log($player);
+          for (playerIndex in players) {
+            player = players[playerIndex];
+            $player = $("#player-" + playerIndex);
             $playerPanel = $player.find('.panel');
             $playerTitle = $player.find('.panel-title');
             $playerCards = [$player.find('.card-0'), $player.find('.card-1')];
             $playerCredits = $player.find('.credits');
-            $playerPanel.removeClass('panel-default').addClass('panel-primary');
+            $playerPanel.prop('class', 'panel panel-default');
             $playerTitle.html(player.name);
-            $playerCards[0].prop('src', player.cards[0]);
-            $playerCards[1].prop('src', player.cards[1]);
+            _ref = player.cards;
+            for (cardIndex in _ref) {
+              card = _ref[cardIndex];
+              $playerCards[cardIndex].prop('src', card);
+            }
             $playerCredits.html("" + player.credits + " Credits");
           }
-          return console.log(players);
+          if (players.length < 2) {
+            return $startButton.prop('disabled', true);
+          } else {
+            return $startButton.prop('disabled', false);
+          }
+          break;
+        case 'start-game':
+          return startGame();
       }
     }
   });
   joinGame = function() {
-    var player;
     if ($username.val() === '') {
       alert('Please enter your name!');
     } else {
       name = htmlEntities($username.val());
       $name.html(name);
-      player = {
-        name: name,
-        cards: ['/images/card_face_down.png', '/images/card_face_down.png'],
-        credits: 2
-      };
       socket.emit('send', {
         message: "<em>" + name + " joined the game</em>"
       });
       socket.emit('play', {
         command: 'join-game',
-        player: player
+        name: name
       });
       $joinGame.collapse('hide');
       $startGame.collapse('show');
@@ -139,16 +142,15 @@ $(function() {
     return true;
   });
   startGame = function() {
-    socket.emit('play', {
-      command: 'start-game'
-    });
     $startGame.collapse('hide');
     $playGame.collapse('show');
     $field.trigger('focus');
     return true;
   };
   $startButton.on('click', function(event) {
-    startGame();
+    socket.emit('play', {
+      command: 'start-game'
+    });
     return true;
   });
   sendMessage = function() {
