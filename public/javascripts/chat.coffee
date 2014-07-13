@@ -75,13 +75,13 @@ $ ->
 				$playerPanel = $player.find('.panel')
 				$playerTitle = $player.find('.panel-title')
 				$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
-				$playerCredits = $player.find('.credits')
+				$playerCredibility = $player.find('.credibility')
 
 				$playerPanel.prop('class', 'panel panel-default')
 				$playerTitle.html(player.name)
 				for cardIndex, card of player.cards
 					$playerCards[cardIndex].prop('src', card)
-				$playerCredits.html("#{player.credits} Credits")
+				$playerCredibility.html("#{player.credibility} Credibility")
 
 			if data.active
 				$player = $("#player-#{data.active}")

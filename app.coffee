@@ -31,7 +31,7 @@ io.sockets.on 'connection', (socket) ->
 			player =
 				name: name
 				cards: ['/images/card_face_down.png', '/images/card_face_down.png']
-				credits: 2
+				credibility: 2
 			players.push(player)
 			io.sockets.emit('board:update', {players: players})
 

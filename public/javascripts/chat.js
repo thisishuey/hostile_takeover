@@ -92,7 +92,7 @@ $(function() {
     return true;
   });
   socket.on('board:update', function(data) {
-    var $player, $playerCards, $playerCredits, $playerPanel, $playerTitle, card, cardIndex, player, playerIndex, players, _ref;
+    var $player, $playerCards, $playerCredibility, $playerPanel, $playerTitle, card, cardIndex, player, playerIndex, players, _ref;
     if (data == null) {
       data = {};
     }
@@ -104,7 +104,7 @@ $(function() {
         $playerPanel = $player.find('.panel');
         $playerTitle = $player.find('.panel-title');
         $playerCards = [$player.find('.card-0'), $player.find('.card-1')];
-        $playerCredits = $player.find('.credits');
+        $playerCredibility = $player.find('.credibility');
         $playerPanel.prop('class', 'panel panel-default');
         $playerTitle.html(player.name);
         _ref = player.cards;
@@ -112,7 +112,7 @@ $(function() {
           card = _ref[cardIndex];
           $playerCards[cardIndex].prop('src', card);
         }
-        $playerCredits.html("" + player.credits + " Credits");
+        $playerCredibility.html("" + player.credibility + " Credibility");
       }
       if (data.active) {
         $player = $("#player-" + data.active);
