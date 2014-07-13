@@ -26,6 +26,7 @@ $ ->
 	$joinGame = $('#join-game')
 	$username = $('#username')
 	$joinButton = $('#join')
+	selfIndex = -1
 	$startGame = $('#start-game')
 	$startButton = $('#start')
 	$playGame = $('#play-game')
@@ -33,6 +34,8 @@ $ ->
 	$name = $('#name')
 	$field = $('#field')
 	$sendButton = $('#send')
+	$gainCredButton = $('#gainCredibility')
+	$loseCredButton = $('#loseCredibility')
 
 	$window.on 'focus', (event) ->
 		windowFocus = yes
@@ -41,6 +44,14 @@ $ ->
 
 	$window.on 'blur', (event) ->
 		windowFocus = no
+		yes
+
+	$gainCredButton.on 'click', (event) ->
+		increaseCredibility(selfIndex, 1)
+		yes
+
+	$loseCredButton.on 'click', (event) ->
+		decreaseCredibility(selfIndex, 1)
 		yes
 
 	socket.on 'message', (data = {}) ->
@@ -74,6 +85,7 @@ $ ->
 			activeSelector = data.activeSelector or off
 
 			for playerIndex, player of players
+				if selfIndex < 0 and player.name is name then selfIndex = playerIndex
 				$player = $("#player-#{playerIndex}")
 				$playerPanel = $player.find('.panel')
 				$playerTitle = $player.find('.panel-title')

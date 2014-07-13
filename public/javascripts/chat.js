@@ -31,7 +31,7 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $username, $window, joinGame, logs, sendMessage, socket, windowFocus;
+  var $content, $field, $gainCredButton, $joinButton, $joinGame, $loseCredButton, $name, $playGame, $sendButton, $startButton, $startGame, $username, $window, joinGame, logs, selfIndex, sendMessage, socket, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(window.location.origin);
@@ -39,6 +39,7 @@ $(function() {
   $joinGame = $('#join-game');
   $username = $('#username');
   $joinButton = $('#join');
+  selfIndex = -1;
   $startGame = $('#start-game');
   $startButton = $('#start');
   $playGame = $('#play-game');
@@ -46,6 +47,8 @@ $(function() {
   $name = $('#name');
   $field = $('#field');
   $sendButton = $('#send');
+  $gainCredButton = $('#gainCredibility');
+  $loseCredButton = $('#loseCredibility');
   $window.on('focus', function(event) {
     windowFocus = true;
     pageTitleNotification.off();
@@ -53,6 +56,14 @@ $(function() {
   });
   $window.on('blur', function(event) {
     windowFocus = false;
+    return true;
+  });
+  $gainCredButton.on('click', function(event) {
+    increaseCredibility(selfIndex, 1);
+    return true;
+  });
+  $loseCredButton.on('click', function(event) {
+    decreaseCredibility(selfIndex, 1);
     return true;
   });
   socket.on('message', function(data) {
@@ -104,6 +115,9 @@ $(function() {
       activeSelector = data.activeSelector || false;
       for (playerIndex in players) {
         player = players[playerIndex];
+        if (selfIndex < 0 && player.name === name) {
+          selfIndex = playerIndex;
+        }
         $player = $("#player-" + playerIndex);
         $playerPanel = $player.find('.panel');
         $playerTitle = $player.find('.panel-title');
