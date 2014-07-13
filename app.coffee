@@ -3,7 +3,7 @@ app = express()
 port = 4839
 
 players = []
-turn = 0
+activeID = 0
 
 app.set('views', "#{__dirname}/tpl")
 app.set('view engine', 'html')
@@ -16,7 +16,7 @@ app.use(express.static("#{__dirname}/public"))
 io = require('socket.io').listen(app.listen(port))
 
 io.sockets.on 'connection', (socket) ->
-	socket.emit('message', {message: 'Welcome to <strong>Hostile Takeover</strong>!'})
+	socket.emit('message', {message: 'Welcome to <strong class=\"text-primary\">Hostile Takeover</strong>!'})
 
 	socket.on 'send', (data = {}) ->
 		io.sockets.emit('message', data)
@@ -37,5 +37,7 @@ io.sockets.on 'connection', (socket) ->
 
 	socket.on 'game:start', (data = {}) ->
 		io.sockets.emit('game:start', data)
+		io.sockets.emit('board:update', {players: players, activeSelector: "#player-#{activeID}"})
+		io.sockets.emit('message', {message: "<em><strong class=\"text-primary\">#{players[activeID].name}</strong>'s turn</em>"})
 
 console.log("Listening on port #{port}")

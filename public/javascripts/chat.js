@@ -83,21 +83,25 @@ $(function() {
     return true;
   });
   socket.on('game:start', function(data) {
+    var $emptyPanels;
     if (data == null) {
       data = {};
     }
+    $emptyPanels = $('.panel-empty');
+    $emptyPanels.css('opacity', 0.25);
     $startGame.collapse('hide');
     $playGame.collapse('show');
     $field.trigger('focus');
     return true;
   });
   socket.on('board:update', function(data) {
-    var $player, $playerCards, $playerCredibility, $playerPanel, $playerTitle, card, cardIndex, player, playerIndex, players, _ref;
+    var $player, $playerCards, $playerCredibility, $playerPanel, $playerTitle, activeSelector, card, cardIndex, player, playerIndex, players, _ref;
     if (data == null) {
       data = {};
     }
     if (data.players) {
       players = data.players;
+      activeSelector = data.activeSelector || false;
       for (playerIndex in players) {
         player = players[playerIndex];
         $player = $("#player-" + playerIndex);
@@ -114,9 +118,9 @@ $(function() {
         }
         $playerCredibility.html("" + player.credibility + " Credibility");
       }
-      if (data.active) {
-        $player = $("#player-" + data.active);
-        $player.prop('class', 'panel panel-primary');
+      if (activeSelector !== false) {
+        $playerPanel = $("" + activeSelector + " .panel");
+        $playerPanel.prop('class', 'panel panel-primary');
       }
       if (players.length < 2) {
         return $startButton.prop('disabled', true);

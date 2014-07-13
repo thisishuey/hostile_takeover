@@ -61,6 +61,8 @@ $ ->
 		yes
 
 	socket.on 'game:start', (data = {}) ->
+		$emptyPanels = $('.panel-empty')
+		$emptyPanels.css('opacity', 0.25)
 		$startGame.collapse('hide')
 		$playGame.collapse('show')
 		$field.trigger('focus')
@@ -69,6 +71,7 @@ $ ->
 	socket.on 'board:update', (data = {}) ->
 		if data.players
 			players = data.players
+			activeSelector = data.activeSelector or off
 
 			for playerIndex, player of players
 				$player = $("#player-#{playerIndex}")
@@ -83,9 +86,9 @@ $ ->
 					$playerCards[cardIndex].prop('src', card)
 				$playerCredibility.html("#{player.credibility} Credibility")
 
-			if data.active
-				$player = $("#player-#{data.active}")
-				$player.prop('class', 'panel panel-primary')
+			if activeSelector isnt off
+				$playerPanel = $("#{activeSelector} .panel")
+				$playerPanel.prop('class', 'panel panel-primary')
 
 			if players.length < 2
 				$startButton.prop('disabled', yes)
