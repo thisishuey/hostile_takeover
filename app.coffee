@@ -38,7 +38,7 @@ io.sockets.on 'connection', (socket) ->
 	socket.on 'game:start', (data = {}) ->
 		io.sockets.emit('game:start', data)
 
-	socket.on 'game:increaseCredibility', (data = {}) ->
+	socket.on 'game:alterCredibility', (data = {}) ->
 		if data.playerIndex isnt null and data.amount isnt null
 			players[data.playerIndex].credibility += data.amount
 			io.sockets.emit('board:update', {players: players})

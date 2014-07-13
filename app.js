@@ -68,7 +68,7 @@ io.sockets.on('connection', function(socket) {
     }
     return io.sockets.emit('game:start', data);
   });
-  socket.on('game:increaseCredibility', function(data) {
+  socket.on('game:alterCredibility', function(data) {
     if (data == null) {
       data = {};
     }
