@@ -40,4 +40,12 @@ io.sockets.on 'connection', (socket) ->
 		io.sockets.emit('board:update', {players: players, activeSelector: "#player-#{activeID}"})
 		io.sockets.emit('message', {message: "<em><strong class=\"text-primary\">#{players[activeID].name}</strong>'s turn</em>"})
 
+	socket.on 'game:alterCredibility', (data = {}) ->
+		if data.playerIndex isnt null and data.amount isnt null
+			players[data.playerIndex].credibility += data.amount
+			io.sockets.emit('board:update', {players: players})
+		yes
+
+	yes
+
 console.log("Listening on port #{port}")

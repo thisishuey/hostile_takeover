@@ -62,7 +62,7 @@ io.sockets.on('connection', function(socket) {
       });
     }
   });
-  return socket.on('game:start', function(data) {
+  socket.on('game:start', function(data) {
     if (data == null) {
       data = {};
     }
@@ -75,6 +75,19 @@ io.sockets.on('connection', function(socket) {
       message: "<em><strong class=\"text-primary\">" + players[activeID].name + "</strong>'s turn</em>"
     });
   });
+  socket.on('game:alterCredibility', function(data) {
+    if (data == null) {
+      data = {};
+    }
+    if (data.playerIndex !== null && data.amount !== null) {
+      players[data.playerIndex].credibility += data.amount;
+      io.sockets.emit('board:update', {
+        players: players
+      });
+    }
+    return true;
+  });
+  return true;
 });
 
 console.log("Listening on port " + port);
