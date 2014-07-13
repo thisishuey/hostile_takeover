@@ -14,3 +14,15 @@
 # Ambassador (Exchange) -> VP (Exchange)
 # Assassin (Assassinate) -> Manager (Fire)
 # Contessa (Block Assassination) -> HR (Block Firing)
+
+increaseCredibility = (playerIndex, amount) ->
+	io.connect(window.location.origin).emit("game:increaseCredibility", {playerIndex: playerIndex, amount: amount})
+	yes
+
+income = (playerIndex) ->
+	increaseCredibility(playerIndex, 1)
+	yes
+
+stockOptions = ->
+
+downsize = ->
