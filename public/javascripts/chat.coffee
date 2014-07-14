@@ -147,7 +147,7 @@ $ ->
 					$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
 					$playerCredibility = $player.find('.credibility')
 
-					$playerPanel.prop('class', 'panel panel-empty')
+					$playerPanel.prop('class', 'panel panel-empty hidden-xs')
 					$playerTitle.html("Player #{playerIndex + 1}")
 					for cardIndex in [0..1]
 						$playerCards[cardIndex].prop('src', '/images/card_blank.png')

@@ -190,7 +190,7 @@ $(function() {
           $playerTitle = $player.find('.panel-title');
           $playerCards = [$player.find('.card-0'), $player.find('.card-1')];
           $playerCredibility = $player.find('.credibility');
-          $playerPanel.prop('class', 'panel panel-empty');
+          $playerPanel.prop('class', 'panel panel-empty hidden-xs');
           $playerTitle.html("Player " + (playerIndex + 1));
           for (cardIndex = _j = 0; _j <= 1; cardIndex = ++_j) {
             $playerCards[cardIndex].prop('src', '/images/card_blank.png');
