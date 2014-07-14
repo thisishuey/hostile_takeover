@@ -1,7 +1,80 @@
 name = ''
 selfIndex = -1
+currentAction = off
+
+actions =
+	income:
+		title: 'Income'
+		text: 'takes <strong class="text-success">Income</strong>'
+	stock_options:
+		title: 'Stock Options'
+		text: 'takes <strong class="text-success">Stock Options</strong>'
+	downsize:
+		title: 'Downsize'
+		target: yes
+		text: 'performs <strong class="text-success">Downsize</strong> on'
+	dividends:
+		title: 'Dividends'
+		text: 'takes <strong class="text-success">Dividends</strong>'
+	block_stock_options:
+		title: 'Block Stock Options'
+		target: yes
+		text: 'blocks <strong class="text-danger">Stock Options</strong> on'
+	steal:
+		title: 'Steal'
+		target: yes
+		text: '<strong class="text-success">Steals</strong> from'
+	block_steal_one_upper:
+		title: 'Block Steal (One-Upper)'
+		target: yes
+		text: '<strong class="text-danger">Blocks Steal (One-Upper)</strong> from'
+	exchange:
+		title: 'Exchange'
+		text: '<strong class="text-success">Exchanges</strong> cards'
+	block_steal_vp:
+		title: 'Block Steal (VP)'
+		target: yes
+		text: '<strong class="text-danger">Blocks Steal (VP)</strong> from'
+	fire:
+		title: 'Fire'
+		target: yes
+		text: '<strong class="text-success">Fires</strong>'
+	block_fire:
+		title: 'Block Fire'
+		target: yes
+		text: '<strong class="text-danger">Blocks Fire</strong> from'
+	report_credibility:
+		title: 'Report Credibility'
+		credibility: yes
+		text: 'now has'
+	call_bluff:
+		title: 'Call Bluff'
+		target: yes
+		text: '<strong class="text-success">Calls Bluff</strong> on'
+	bluffed_cfo:
+		title: 'Bluffed CFO'
+		text: '<strong class="text-danger">Bluffed CFO</strong>'
+	bluffed_one_upper:
+		title: 'Bluffed One-Upper'
+		text: '<strong class="text-danger">Bluffed One-Upper</strong>'
+	bluffed_vp:
+		title: 'Bluffed VP'
+		text: '<strong class="text-danger">Bluffed VP</strong>'
+	bluffed_manager:
+		title: 'Bluffed Manager'
+		text: '<strong class="text-danger">Bluffed Manager</strong>'
+	bluffed_hr:
+		title: 'Bluffed HR'
+		text: '<strong class="text-danger">Bluffed HR</strong>'
+	resign:
+		title: 'Resign'
+		text: 'has <strong class="text-danger">Resigned</strong>'
+	hostile_takeover:
+		title: 'Hostile Takeover'
+		text: '<strong class="text-success">has WON HOSTILE TAKEOVER!!!</strong>'
 
 cardPositions = ['first card', 'second card']
+
 cards =
 	face_down:
 		title: 'Face Down'
@@ -49,7 +122,7 @@ pageTitleNotification =
 $ ->
 	$window = $(window)
 	windowFocus = yes
-	socket = io.connect(window.location.origin)
+	socket = io.connect(location.origin)
 	logs = []
 	$joinGame = $('#join-game')
 	$username = $('#username')
@@ -63,6 +136,8 @@ $ ->
 	$sendButton = $('#send')
 	$gainCredButton = $('#gainCredibility')
 	$loseCredButton = $('#loseCredibility')
+	$alterAction = $('.alter-action')
+	$target = $('#target')
 	$alterCard = $('.alter-card')
 
 	$window.on 'focus', (event) ->
@@ -114,7 +189,6 @@ $ ->
 
 			if players.length
 				for playerIndex, player of players
-					if selfIndex < 0 and player.name is name then selfIndex = playerIndex
 					$player = $("#player-#{playerIndex}")
 					$playerPanel = $player.find('.panel')
 					$playerTitle = $player.find('.panel-title')
@@ -133,6 +207,9 @@ $ ->
 					for cardIndex, card of player.cards
 						$playerCards[cardIndex].prop('src', card)
 					$playerCredibility.html("#{player.credibility} Credibility")
+
+					if selfIndex < 0 and player.name is name
+						selfIndex = playerIndex
 
 				if players.length < 2
 					$startButton.prop('disabled', yes)
@@ -207,6 +284,35 @@ $ ->
 	$field.on 'keydown', (event) ->
 		if event.keyCode is 13
 			sendMessage()
+		yes
+
+	sendActionMessage = (text, target = false) ->
+		socket.emit('send', {username: name, message: "<em>#{text}</em>"})
+		$('#actionsModal').modal('hide')
+
+	$alterAction.on 'click', (event) ->
+		event.preventDefault()
+		$that = $(this)
+		action = $that.data('action')
+		text = actions[action].text
+		if actions[action].target
+			if $target.val() isnt ''
+				targetText = $target.val()
+				text += " <strong class=\"text-primary\">#{targetText}</strong>"
+				$target.val('')
+				currentAction = off
+			else
+				currentAction = action
+				$target.trigger('focus')
+				return no
+		if actions[action].credibility
+			credibilityText = $("#player-#{selfIndex} .credibility").text()
+			text += " <strong class=\"text-success\">#{credibilityText}</strong>"
+		sendActionMessage(text)
+
+	$target.on 'keydown', (event) ->
+		if event.keyCode is 13 and currentAction
+			$("[data-action=#{currentAction}]").trigger('click')
 		yes
 
 	sendCardMessage = (position, card) ->
