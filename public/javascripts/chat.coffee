@@ -1,5 +1,5 @@
 name = ''
-playerIndex = 0
+selfIndex = -1
 
 htmlEntities = (string) ->
 	String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -27,7 +27,6 @@ $ ->
 	$joinGame = $('#join-game')
 	$username = $('#username')
 	$joinButton = $('#join')
-	selfIndex = -1
 	$startGame = $('#start-game')
 	$startButton = $('#start')
 	$playGame = $('#play-game')
@@ -91,33 +90,10 @@ $ ->
 	socket.on 'board:update', (data = {}) ->
 		if data.players
 			players = data.players
-<<<<<<< Updated upstream
-			activeSelector = data.activeSelector or off
-
-			for playerIndex, player of players
-				if selfIndex < 0 and player.name is name then selfIndex = playerIndex
-				$player = $("#player-#{playerIndex}")
-				$playerPanel = $player.find('.panel')
-				$playerTitle = $player.find('.panel-title')
-				$playerCards = [$player.find('.card-0'), $player.find('.card-1')]
-				$playerCredibility = $player.find('.credibility')
-
-				$playerPanel.prop('class', 'panel panel-default')
-				$playerTitle.html(player.name)
-				for cardIndex, card of player.cards
-					$playerCards[cardIndex].prop('src', card)
-				$playerCredibility.html("#{player.credibility} Credibility")
-
-			if activeSelector isnt off
-				$playerPanel = $("#{activeSelector} .panel")
-				$playerPanel.prop('class', 'panel panel-primary')
-
-			if players.length < 2
-				$startButton.prop('disabled', yes)
-=======
 
 			if players.length
 				for playerIndex, player of players
+					if selfIndex < 0 and player.name is name then selfIndex = playerIndex
 					$player = $("#player-#{playerIndex}")
 					$playerPanel = $player.find('.panel')
 					$playerTitle = $player.find('.panel-title')
@@ -138,7 +114,6 @@ $ ->
 				else
 					$startButton.prop('disabled', no)
 
->>>>>>> Stashed changes
 			else
 				for playerIndex in [0..5]
 					$player = $("#player-#{playerIndex}")
@@ -211,31 +186,31 @@ $ ->
 
 	$alterCardBlank.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_blank.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_blank.png'})
 
 	$alterCardFaceDown.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_face_down.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_face_down.png'})
 
 	$alterCardCFO.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_cfo.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_cfo.png'})
 
 	$alterCardOneUpper.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_one_upper.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_one_upper.png'})
 
 	$alterCardVP.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_vp.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_vp.png'})
 
 	$alterCardManager.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_manager.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_manager.png'})
 
 	$alterCardHR.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: 0, cardIndex: 0, src: '/images/card_hr.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_hr.png'})
 
 	socket.emit('game:reset')
 
