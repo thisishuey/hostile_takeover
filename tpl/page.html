@@ -184,35 +184,48 @@
 						</div>
 						<div class="modal-body">
 							<div class="row">
-								<button id="gainCredibility" type="button" class="btn btn-default">
-									<span class="glyphicon glyphicon-chevron-up"></span>
-								</button>
-							</div>
-							<div class="row">
-								<button id="loseCredibility" type="button" class="btn btn-default">
-									<span class="glyphicon glyphicon-chevron-down"></span>
-								</button>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-blank">Card: Blank</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-face-down">Card: Face Down</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-cfo">Card: CFO</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-one-upper">Card: One-Upper</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-vp">Card: VP</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-manager">Card: Manager</a>
-							</div>
-							<div class="alter-card-wrapper">
-								<a href="#" class="btn btn-primary" id="alter-card-hr">Card: HR</a>
+								<div class="col-sm-2">
+									<button id="gainCredibility" type="button" class="btn btn-default">
+										<span class="glyphicon glyphicon-chevron-up"></span>
+									</button>
+									<button id="loseCredibility" type="button" class="btn btn-default">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</button>
+								</div>
+								<div class="col-sm-10">
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+											First Card <span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#" class="alter-card-face-down" data-card-index="0">Face Down</a></li>
+											<li class="divider"></li>
+											<li><a href="#" class="alter-card-cfo" data-card-index="0">CFO</a></li>
+											<li><a href="#" class="alter-card-one-upper" data-card-index="0">One-Upper</a></li>
+											<li><a href="#" class="alter-card-vp" data-card-index="0">VP</a></li>
+											<li><a href="#" class="alter-card-manager" data-card-index="0">Manager</a></li>
+											<li><a href="#" class="alter-card-hr" data-card-index="0">HR</a></li>
+											<li class="divider"></li>
+											<li><a href="#" class="alter-card-blank" data-card-index="0">Blank</a></li>
+										</ul>
+									</div>
+									<div class="btn-group">
+										<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+											Second Card <span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#" class="alter-card-face-down" data-card-index="1">Face Down</a></li>
+											<li class="divider"></li>
+											<li><a href="#" class="alter-card-cfo" data-card-index="1">CFO</a></li>
+											<li><a href="#" class="alter-card-one-upper" data-card-index="1">One-Upper</a></li>
+											<li><a href="#" class="alter-card-vp" data-card-index="1">VP</a></li>
+											<li><a href="#" class="alter-card-manager" data-card-index="1">Manager</a></li>
+											<li><a href="#" class="alter-card-hr" data-card-index="1">HR</a></li>
+											<li class="divider"></li>
+											<li><a href="#" class="alter-card-blank" data-card-index="1">Blank</a></li>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -36,13 +36,13 @@ $ ->
 	$sendButton = $('#send')
 	$gainCredButton = $('#gainCredibility')
 	$loseCredButton = $('#loseCredibility')
-	$alterCardBlank = $('#alter-card-blank')
-	$alterCardFaceDown = $('#alter-card-face-down')
-	$alterCardCFO = $('#alter-card-cfo')
-	$alterCardOneUpper = $('#alter-card-one-upper')
-	$alterCardVP = $('#alter-card-vp')
-	$alterCardManager = $('#alter-card-manager')
-	$alterCardHR = $('#alter-card-hr')
+	$alterCardBlank = $('.alter-card-blank')
+	$alterCardFaceDown = $('.alter-card-face-down')
+	$alterCardCFO = $('.alter-card-cfo')
+	$alterCardOneUpper = $('.alter-card-one-upper')
+	$alterCardVP = $('.alter-card-vp')
+	$alterCardManager = $('.alter-card-manager')
+	$alterCardHR = $('.alter-card-hr')
 
 	$window.on 'focus', (event) ->
 		windowFocus = yes
@@ -104,6 +104,10 @@ $ ->
 						$playerPanel.prop('class', 'panel panel-primary')
 					else
 						$playerPanel.prop('class', 'panel panel-default')
+
+					# Temporary hack until turn functionality is added
+					$playerPanel.prop('class', 'panel panel-primary')
+
 					$playerTitle.html(player.name)
 					for cardIndex, card of player.cards
 						$playerCards[cardIndex].prop('src', card)
@@ -186,31 +190,45 @@ $ ->
 
 	$alterCardBlank.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_blank.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_blank.png'})
 
 	$alterCardFaceDown.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_face_down.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_face_down.png'})
 
 	$alterCardCFO.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_cfo.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_cfo.png'})
 
 	$alterCardOneUpper.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_one_upper.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_one_upper.png'})
 
 	$alterCardVP.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_vp.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_vp.png'})
 
 	$alterCardManager.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_manager.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_manager.png'})
 
 	$alterCardHR.on 'click', (event) ->
 		event.preventDefault()
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: 0, src: '/images/card_hr.png'})
+		$that = $(this)
+		cardIndex = $that.data('card-index')
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_hr.png'})
 
 	socket.emit('game:reset')
 

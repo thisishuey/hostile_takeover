@@ -50,13 +50,13 @@ $(function() {
   $sendButton = $('#send');
   $gainCredButton = $('#gainCredibility');
   $loseCredButton = $('#loseCredibility');
-  $alterCardBlank = $('#alter-card-blank');
-  $alterCardFaceDown = $('#alter-card-face-down');
-  $alterCardCFO = $('#alter-card-cfo');
-  $alterCardOneUpper = $('#alter-card-one-upper');
-  $alterCardVP = $('#alter-card-vp');
-  $alterCardManager = $('#alter-card-manager');
-  $alterCardHR = $('#alter-card-hr');
+  $alterCardBlank = $('.alter-card-blank');
+  $alterCardFaceDown = $('.alter-card-face-down');
+  $alterCardCFO = $('.alter-card-cfo');
+  $alterCardOneUpper = $('.alter-card-one-upper');
+  $alterCardVP = $('.alter-card-vp');
+  $alterCardManager = $('.alter-card-manager');
+  $alterCardHR = $('.alter-card-hr');
   $window.on('focus', function(event) {
     windowFocus = true;
     pageTitleNotification.off();
@@ -137,6 +137,7 @@ $(function() {
           } else {
             $playerPanel.prop('class', 'panel panel-default');
           }
+          $playerPanel.prop('class', 'panel panel-primary');
           $playerTitle.html(player.name);
           _ref = player.cards;
           for (cardIndex in _ref) {
@@ -237,58 +238,79 @@ $(function() {
     return true;
   });
   $alterCardBlank.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_blank.png'
     });
   });
   $alterCardFaceDown.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_face_down.png'
     });
   });
   $alterCardCFO.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_cfo.png'
     });
   });
   $alterCardOneUpper.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_one_upper.png'
     });
   });
   $alterCardVP.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_vp.png'
     });
   });
   $alterCardManager.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_manager.png'
     });
   });
   $alterCardHR.on('click', function(event) {
+    var $that, cardIndex;
     event.preventDefault();
+    $that = $(this);
+    cardIndex = $that.data('card-index');
     return socket.emit('game:alterCard', {
       playerIndex: selfIndex,
-      cardIndex: 0,
+      cardIndex: cardIndex,
       src: '/images/card_hr.png'
     });
   });
