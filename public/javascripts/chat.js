@@ -222,7 +222,7 @@ $(function() {
       $content.scrollTop($content.prop('scrollHeight'));
       if (data.username && username !== name && !windowFocus) {
         pageTitleNotification.off();
-        pageTitleNotification.on("" + username + " says " + (stripTags(text)), 1500);
+        pageTitleNotification.on("" + username + ": " + (stripTags(text)), 1500);
       }
     } else {
       console.log("There is a problem: " + data);
