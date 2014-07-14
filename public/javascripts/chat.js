@@ -280,8 +280,8 @@ $(function() {
     var $that, card, cardIndex;
     event.preventDefault();
     $that = $(this);
-    card = $that.data('card');
     cardIndex = $that.data('card-index');
+    card = $that.data('card');
     socket.emit('game:alterCard', {
       playerIndex: selfIndex,
       cardIndex: cardIndex,

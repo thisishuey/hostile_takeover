@@ -216,8 +216,8 @@ $ ->
 	$alterCard.on 'click', (event) ->
 		event.preventDefault()
 		$that = $(this)
-		card = $that.data('card')
 		cardIndex = $that.data('card-index')
+		card = $that.data('card')
 		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: cards[card].src})
 		sendCardMessage(cardPositions[cardIndex], cards[card].title)
 
