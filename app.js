@@ -54,7 +54,8 @@ io.sockets.on('connection', function(socket) {
       player = {
         name: name,
         cards: ['/images/card_face_down.png', '/images/card_face_down.png'],
-        credibility: 2
+        credibility: 2,
+        active: players.length < 1
       };
       players.push(player);
       return io.sockets.emit('board:update', {
@@ -67,13 +68,20 @@ io.sockets.on('connection', function(socket) {
       data = {};
     }
     io.sockets.emit('game:start', data);
-    io.sockets.emit('board:update', {
-      players: players,
-      activeSelector: "#player-" + activeID
+    return io.sockets.emit('board:update', {
+      players: players
     });
-    return io.sockets.emit('message', {
-      message: "<em><strong class=\"text-primary\">" + players[activeID].name + "</strong>'s turn</em>"
-    });
+  });
+  socket.on('game:alterCard', function(data) {
+    if (data == null) {
+      data = {};
+    }
+    if (data.playerIndex !== null && data.cardIndex !== null && data.src !== null) {
+      players[data.playerIndex].cards[data.cardIndex] = data.src;
+      return io.sockets.emit('board:update', {
+        players: players
+      });
+    }
   });
   socket.on('game:alterCredibility', function(data) {
     if (data == null) {

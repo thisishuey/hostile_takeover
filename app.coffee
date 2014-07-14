@@ -32,13 +32,18 @@ io.sockets.on 'connection', (socket) ->
 				name: name
 				cards: ['/images/card_face_down.png', '/images/card_face_down.png']
 				credibility: 2
+				active: players.length < 1
 			players.push(player)
 			io.sockets.emit('board:update', {players: players})
 
 	socket.on 'game:start', (data = {}) ->
 		io.sockets.emit('game:start', data)
-		io.sockets.emit('board:update', {players: players, activeSelector: "#player-#{activeID}"})
-		io.sockets.emit('message', {message: "<em><strong class=\"text-primary\">#{players[activeID].name}</strong>'s turn</em>"})
+		io.sockets.emit('board:update', {players: players})
+
+	socket.on 'game:alterCard', (data = {}) ->
+		if data.playerIndex isnt null and data.cardIndex isnt null and data.src isnt null
+			players[data.playerIndex].cards[data.cardIndex] = data.src
+			io.sockets.emit('board:update', {players: players})
 
 	socket.on 'game:alterCredibility', (data = {}) ->
 		if data.playerIndex isnt null and data.amount isnt null
