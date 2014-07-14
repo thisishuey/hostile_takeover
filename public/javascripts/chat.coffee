@@ -1,8 +1,35 @@
 name = ''
 selfIndex = -1
 
+cardPositions = ['first card', 'second card']
+cards =
+	face_down:
+		title: 'Face Down'
+		src: '/images/card_face_down.png'
+	cfo:
+		title: 'CFO'
+		src: '/images/card_cfo.png'
+	one_upper:
+		title: 'One-Upper'
+		src: '/images/card_one_upper.png'
+	vp:
+		title: 'VP'
+		src: '/images/card_vp.png'
+	manager:
+		title: 'Manager'
+		src: '/images/card_manager.png'
+	hr:
+		title: 'HR'
+		src: '/images/card_hr.png'
+	blank:
+		title: 'Blank'
+		src: '/images/card_blank.png'
+
 htmlEntities = (string) ->
 	String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+stripTags = (string) ->
+	String(string).replace(/(<([^>]+)>)/ig,"")
 
 pageTitleNotification =
 	vars:
@@ -36,13 +63,7 @@ $ ->
 	$sendButton = $('#send')
 	$gainCredButton = $('#gainCredibility')
 	$loseCredButton = $('#loseCredibility')
-	$alterCardBlank = $('.alter-card-blank')
-	$alterCardFaceDown = $('.alter-card-face-down')
-	$alterCardCFO = $('.alter-card-cfo')
-	$alterCardOneUpper = $('.alter-card-one-upper')
-	$alterCardVP = $('.alter-card-vp')
-	$alterCardManager = $('.alter-card-manager')
-	$alterCardHR = $('.alter-card-hr')
+	$alterCard = $('.alter-card')
 
 	$window.on 'focus', (event) ->
 		windowFocus = yes
@@ -67,13 +88,13 @@ $ ->
 			username = if data.username then data.username else 'Server'
 			text = data.message
 			$message = $('<div>', {class: 'message'})
-			$message.append($('<strong>', {html: "#{username}: "}))
+			$message.append($('<strong>', {html: "#{username}: ", class: 'text-primary'}))
 			$message.append(text)
 			$content.append($message)
 			$content.scrollTop($content.prop('scrollHeight'))
 			if data.username and username isnt name and not windowFocus
 				pageTitleNotification.off()
-				pageTitleNotification.on("#{username} says #{text}", 1500)
+				pageTitleNotification.on("#{username} says #{stripTags(text)}", 1500)
 		else
 			console.log("There is a problem: #{data}")
 		yes
@@ -188,47 +209,17 @@ $ ->
 			sendMessage()
 		yes
 
-	$alterCardBlank.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_blank.png'})
+	sendCardMessage = (position, card) ->
+		socket.emit('send', {username: name, message: "<em>changed #{position} to <strong class=\"text-success\">#{card}</strong></em>"})
+		$('#actionsModal').modal('hide')
 
-	$alterCardFaceDown.on 'click', (event) ->
+	$alterCard.on 'click', (event) ->
 		event.preventDefault()
 		$that = $(this)
+		card = $that.data('card')
 		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_face_down.png'})
-
-	$alterCardCFO.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_cfo.png'})
-
-	$alterCardOneUpper.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_one_upper.png'})
-
-	$alterCardVP.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_vp.png'})
-
-	$alterCardManager.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_manager.png'})
-
-	$alterCardHR.on 'click', (event) ->
-		event.preventDefault()
-		$that = $(this)
-		cardIndex = $that.data('card-index')
-		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: '/images/card_hr.png'})
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: cards[card].src})
+		sendCardMessage(cardPositions[cardIndex], cards[card].title)
 
 	socket.emit('game:reset')
 
