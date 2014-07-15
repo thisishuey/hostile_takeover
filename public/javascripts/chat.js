@@ -197,9 +197,19 @@ $(function() {
     increaseCredibility(selfIndex, 1);
     return true;
   });
+  $gainCredButton.on('keydown', function(event) {
+    if (event.keyCode = 13) {
+      return sendMessage();
+    }
+  });
   $loseCredButton.on('click', function(event) {
     decreaseCredibility(selfIndex, 1);
     return true;
+  });
+  $loseCredButton.on('keydown', function(event) {
+    if (event.keyCode = 13) {
+      return sendMessage();
+    }
   });
   socket.on('message', function(data) {
     var $message, text, username;
@@ -342,9 +352,10 @@ $(function() {
     return true;
   });
   sendMessage = function() {
-    var text;
+    var credibilityText, text;
     if ($field.val() === '') {
-      alert('Please enter a message!');
+      credibilityText = $("#player-" + selfIndex + " .credibility").text();
+      sendActionMessage("has <strong class=\"text-success\">" + credibilityText + "</strong>");
     } else {
       text = htmlEntities($field.val());
       socket.emit('send', {

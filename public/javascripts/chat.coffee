@@ -152,10 +152,16 @@ $ ->
 	$gainCredButton.on 'click', (event) ->
 		increaseCredibility(selfIndex, 1)
 		yes
+	$gainCredButton.on 'keydown', (event) ->
+		if event.keyCode = 13
+			sendMessage()
 
 	$loseCredButton.on 'click', (event) ->
 		decreaseCredibility(selfIndex, 1)
 		yes
+	$loseCredButton.on 'keydown', (event) ->
+		if event.keyCode = 13
+			sendMessage()
 
 	socket.on 'message', (data = {}) ->
 		if data.message
@@ -271,7 +277,9 @@ $ ->
 
 	sendMessage = ->
 		if $field.val() is ''
-			alert('Please enter a message!')
+			#alert('Please enter a message!')
+			credibilityText = $("#player-#{selfIndex} .credibility").text()
+			sendActionMessage("has <strong class=\"text-success\">#{credibilityText}</strong>")
 		else
 			text = htmlEntities($field.val())
 			socket.emit('send', {username: name, message: text})

@@ -166,7 +166,15 @@
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-6">
 							<div class="input-group">
-								<input type="text" class="form-control" id="field" placeholder="Enter Your Message">
+								<div class="input-group-btn">
+									<button class="btn btn-default" id="gainCredibility">
+										<span class="glyphicon glyphicon-chevron-up"></span>
+									</button>
+									<button class="btn btn-default" id="loseCredibility">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</button>
+								</div>
+								<input type="text" class="form-control" id="field" placeholder="Enter Your Message or Send Blank to Report Score">
 								<div class="input-group-btn">
 									<button class="btn btn-primary" id="send">
 										<span class="glyphicon glyphicon-send"></span>
@@ -312,7 +320,7 @@
 											<td>-</td>
 											<td>Change your second card</td>
 										</tr>
-										<tr>
+										<!-- <tr>
 											<td>-</td>
 											<td><button class="btn btn-default btn-xs btn-block" id="gainCredibility">Increase Credibility</button></td>
 											<td>-</td>
@@ -329,7 +337,7 @@
 											<td><button class="btn btn-default btn-xs btn-block alter-action" data-action="report_credibility">Report Credibility</button></td>
 											<td>-</td>
 											<td>Report your credibility to the game logs</td>
-										</tr>
+										</tr> -->
 										<tr>
 											<td>-</td>
 											<td><button class="btn btn-default btn-xs btn-block alter-action" data-action="call_bluff">Call Bluff</button></td>
