@@ -393,7 +393,9 @@ $(function() {
   };
   parseCLI = function(commandString) {
     var commands;
-    commands = commandString.split(':');
+    commandString = $.trim(commandString.replace(/:/g, ' '));
+    console.log(commandString);
+    commands = commandString.split(' ');
     commands = $.grep(commands, function(n) {
       return n;
     });
