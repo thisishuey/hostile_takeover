@@ -88,7 +88,9 @@ io.sockets.on('connection', function(socket) {
       data = {};
     }
     if (data.playerIndex !== null && data.amount !== null) {
-      players[data.playerIndex].credibility += data.amount;
+      if (data.amount >= 0 || data.amount * -1 <= players[data.playerIndex].credibility) {
+        players[data.playerIndex].credibility += data.amount;
+      }
       io.sockets.emit('board:update', {
         players: players
       });
