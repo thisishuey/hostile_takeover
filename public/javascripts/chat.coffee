@@ -309,52 +309,52 @@ $ ->
 		commands = $.grep commands, (n) -> n
 		if commands.length > 0
 			switch commands[0]
-				when "block"
+				when 'block'
 					if commands.length > 2
 						$target.val(commands[2])
 						switch commands[1]
-							when "cfo", "stock", "stock_options"
-								performAction("block_stock_options")
-							when "1up", "steal1up"
-								performAction("block_steal_one_upper")
-							when "vp", "stealvp"
-								performAction("block_steal_vp")
-							when "hr", "fire"
-								performAction("block_fire")
-				when "bs"
+							when 'cfo', 'stock', 'stock_options'
+								performAction('block_stock_options')
+							when '1up', 'steal1up'
+								performAction('block_steal_one_upper')
+							when 'vp', 'stealvp'
+								performAction('block_steal_vp')
+							when 'hr', 'fire'
+								performAction('block_fire')
+				when 'bs'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction "call_bluff"
-				when "card"
+						performAction 'call_bluff'
+				when 'card'
 					if commands.length > 2
 						performCardAction(parseInt(commands[1] - 1, 10), commands[2])
-				when "cred"
+				when 'cred'
 					if commands.length is 1
 						sendCredibilityMessage()
 					else
 						alterCredibility(selfIndex, parseInt commands[1], 10)
-				when "dividends", "tax"
-					performAction "dividends"
+				when 'dividends', 'tax'
+					performAction 'dividends'
 					alterCredibility(selfIndex, 3)
-				when "downsize", "coup"
+				when 'downsize', 'coup'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction "downsize"
-				when "exchange"
-					performAction "exchange"
-				when "fire"
+						performAction 'downsize'
+				when 'exchange'
+					performAction 'exchange'
+				when 'fire'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction "fire"
-				when "income"
-					performAction "income"
+						performAction 'fire'
+				when 'income'
+					performAction 'income'
 					alterCredibility(selfIndex, 1)
-				when "steal"
+				when 'steal'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction "steal"
-				when "stock_options", "stock"
-					performAction "stock_options"
+						performAction 'steal'
+				when 'stock_options', 'stock'
+					performAction 'stock_options'
 					alterCredibility(selfIndex, 2)
 		yes
 

@@ -401,81 +401,81 @@ $(function() {
     });
     if (commands.length > 0) {
       switch (commands[0]) {
-        case "block":
+        case 'block':
           if (commands.length > 2) {
             $target.val(commands[2]);
             switch (commands[1]) {
-              case "cfo":
-              case "stock":
-              case "stock_options":
-                performAction("block_stock_options");
+              case 'cfo':
+              case 'stock':
+              case 'stock_options':
+                performAction('block_stock_options');
                 break;
-              case "1up":
-              case "steal1up":
-                performAction("block_steal_one_upper");
+              case '1up':
+              case 'steal1up':
+                performAction('block_steal_one_upper');
                 break;
-              case "vp":
-              case "stealvp":
-                performAction("block_steal_vp");
+              case 'vp':
+              case 'stealvp':
+                performAction('block_steal_vp');
                 break;
-              case "hr":
-              case "fire":
-                performAction("block_fire");
+              case 'hr':
+              case 'fire':
+                performAction('block_fire');
             }
           }
           break;
-        case "bs":
+        case 'bs':
           if (commands.length > 1) {
             $target.val(commands[1]);
-            performAction("call_bluff");
+            performAction('call_bluff');
           }
           break;
-        case "card":
+        case 'card':
           if (commands.length > 2) {
             performCardAction(parseInt(commands[1] - 1, 10), commands[2]);
           }
           break;
-        case "cred":
+        case 'cred':
           if (commands.length === 1) {
             sendCredibilityMessage();
           } else {
             alterCredibility(selfIndex, parseInt(commands[1], 10));
           }
           break;
-        case "dividends":
-        case "tax":
-          performAction("dividends");
+        case 'dividends':
+        case 'tax':
+          performAction('dividends');
           alterCredibility(selfIndex, 3);
           break;
-        case "downsize":
-        case "coup":
+        case 'downsize':
+        case 'coup':
           if (commands.length > 1) {
             $target.val(commands[1]);
-            performAction("downsize");
+            performAction('downsize');
           }
           break;
-        case "exchange":
-          performAction("exchange");
+        case 'exchange':
+          performAction('exchange');
           break;
-        case "fire":
+        case 'fire':
           if (commands.length > 1) {
             $target.val(commands[1]);
-            performAction("fire");
+            performAction('fire');
           }
           break;
-        case "income":
-          performAction("income");
+        case 'income':
+          performAction('income');
           alterCredibility(selfIndex, 1);
           break;
-        case "steal":
+        case 'steal':
           if (commands.length > 1) {
             $target.val(commands[1]);
-            performAction("steal");
+            performAction('steal');
           }
           break;
-        case "stock_options":
-        case "stock":
-          performAction("stock_options");
+        case 'stock_options':
+        case 'stock':
+          performAction('stock_options');
           alterCredibility(selfIndex, 2);
       }
     }
