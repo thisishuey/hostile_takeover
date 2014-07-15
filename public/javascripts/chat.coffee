@@ -217,6 +217,8 @@ $ ->
 					$startButton.prop('disabled', no)
 
 			else
+				selfIndex = -1
+
 				for playerIndex in [0..5]
 					$player = $("#player-#{playerIndex}")
 					$playerPanel = $player.find('.panel')

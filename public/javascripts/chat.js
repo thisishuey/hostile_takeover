@@ -280,6 +280,7 @@ $(function() {
           return $startButton.prop('disabled', false);
         }
       } else {
+        selfIndex = -1;
         for (playerIndex = _i = 0; _i <= 5; playerIndex = ++_i) {
           $player = $("#player-" + playerIndex);
           $playerPanel = $player.find('.panel');
