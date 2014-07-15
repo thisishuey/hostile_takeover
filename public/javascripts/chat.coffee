@@ -304,7 +304,6 @@ $ ->
 
 	parseCLI = (commandString) ->
 		commandString = $.trim(commandString.replace(/:/g, ' '))
-		console.log(commandString)
 		commands = commandString.split ' '
 		commands = $.grep commands, (n) -> n
 		if commands.length > 0

@@ -394,7 +394,6 @@ $(function() {
   parseCLI = function(commandString) {
     var commands;
     commandString = $.trim(commandString.replace(/:/g, ' '));
-    console.log(commandString);
     commands = commandString.split(' ');
     commands = $.grep(commands, function(n) {
       return n;
