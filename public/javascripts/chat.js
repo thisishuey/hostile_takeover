@@ -8,9 +8,9 @@ selfIndex = -1;
 currentAction = false;
 
 actions = {
-  income: {
-    title: 'Income',
-    text: 'takes <strong class="text-success">Income</strong>'
+  paycheck: {
+    title: 'Paycheck',
+    text: 'takes <strong class="text-success">Paycheck</strong>'
   },
   stock_options: {
     title: 'Stock Options',
@@ -95,14 +95,14 @@ actions = {
   },
   hostile_takeover: {
     title: 'Hostile Takeover',
-    text: '<strong class="text-success">has WON HOSTILE TAKEOVER!!!</strong>'
+    text: '<strong class="text-success">WON HOSTILE TAKEOVER!!!</strong>'
   }
 };
 
 cardPositions = ['first card', 'second card'];
 
 cards = {
-  face_down: {
+  down: {
     title: 'Face Down',
     src: '/images/card_face_down.png'
   },
@@ -110,7 +110,7 @@ cards = {
     title: 'CFO',
     src: '/images/card_cfo.png'
   },
-  one_upper: {
+  '1up': {
     title: 'One-Upper',
     src: '/images/card_one_upper.png'
   },
@@ -118,7 +118,7 @@ cards = {
     title: 'VP',
     src: '/images/card_vp.png'
   },
-  manager: {
+  man: {
     title: 'Manager',
     src: '/images/card_manager.png'
   },
@@ -170,7 +170,7 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $alterAction, $alterCard, $content, $field, $gainCredButton, $joinButton, $joinGame, $loseCredButton, $name, $playGame, $sendButton, $startButton, $startGame, $target, $username, $window, joinGame, logs, parseCLI, performAction, performCardAction, sendActionMessage, sendCardMessage, sendCredibilityMessage, sendMessage, socket, windowFocus;
+  var $alterAction, $alterCard, $content, $decreaseCredibility, $field, $increaseCredibility, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $target, $username, $window, joinGame, logs, parseCLI, performAction, performCardAction, sendActionMessage, sendCardMessage, sendCredibilityMessage, sendMessage, socket, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(location.origin);
@@ -185,8 +185,8 @@ $(function() {
   $name = $('#name');
   $field = $('#field');
   $sendButton = $('#send');
-  $gainCredButton = $('#gainCredibility');
-  $loseCredButton = $('#loseCredibility');
+  $increaseCredibility = $('.increase-credibility');
+  $decreaseCredibility = $('.decrease-credibility');
   $alterAction = $('.alter-action');
   $target = $('#target');
   $alterCard = $('.alter-card');
@@ -199,11 +199,11 @@ $(function() {
     windowFocus = false;
     return true;
   });
-  $gainCredButton.on('click', function(event) {
+  $increaseCredibility.on('click', function(event) {
     alterCredibility(selfIndex, 1);
     return true;
   });
-  $loseCredButton.on('click', function(event) {
+  $decreaseCredibility.on('click', function(event) {
     alterCredibility(selfIndex, -1);
     return true;
   });
@@ -392,98 +392,156 @@ $(function() {
     return true;
   };
   parseCLI = function(commandString) {
-    var commands;
+    var block, blocks, commands, _i, _len;
     commandString = $.trim(commandString.replace(/:/g, ' '));
-    commands = commandString.split(' ');
-    commands = $.grep(commands, function(n) {
-      return n;
-    });
-    if (commands.length > 0) {
-      switch (commands[0]) {
-        case 'income':
-          performAction('income');
-          alterCredibility(selfIndex, 1);
-          break;
-        case 'stock_options':
-        case 'stock':
-          performAction('stock_options');
-          alterCredibility(selfIndex, 2);
-          break;
-        case 'downsize':
-        case 'coup':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('downsize');
-          }
-          break;
-        case 'dividends':
-        case 'tax':
-          performAction('dividends');
-          alterCredibility(selfIndex, 3);
-          break;
-        case 'block':
-          if (commands.length > 2) {
-            $target.val(commands[2]);
-            switch (commands[1]) {
-              case 'cfo':
-              case 'stock':
-              case 'stock_options':
-                performAction('block_stock_options');
-                break;
-              case '1up':
-              case 'steal1up':
-                performAction('block_steal_one_upper');
-                break;
-              case 'vp':
-              case 'stealvp':
-                performAction('block_steal_vp');
-                break;
-              case 'hr':
-              case 'fire':
-                performAction('block_fire');
+    blocks = commandString.split('|');
+    for (_i = 0, _len = blocks.length; _i < _len; _i++) {
+      block = blocks[_i];
+      commands = $.trim(block).split(' ');
+      commands = $.grep(commands, function(n) {
+        return n;
+      });
+      if (commands.length > 0) {
+        switch (commands[0]) {
+          case 'paycheck':
+          case 'income':
+            performAction('paycheck');
+            alterCredibility(selfIndex, 1);
+            break;
+          case 'stock':
+          case 'stock_options':
+          case 'foreign_aid':
+            performAction('stock_options');
+            alterCredibility(selfIndex, 2);
+            break;
+          case 'downsize':
+          case 'coup':
+            if (commands.length > 1) {
+              $target.val(commands[1]);
+              performAction('downsize');
+              alterCredibility(selfIndex, -7);
             }
-          }
-          break;
-        case 'steal':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('steal');
-          }
-          break;
-        case 'exchange':
-          performAction('exchange');
-          break;
-        case 'fire':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('fire');
-          }
-          break;
-        case 'bs':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('call_bluff');
-          }
-          break;
-        case 'card':
-          if (commands.length > 2) {
-            performCardAction(parseInt(commands[1] - 1, 10), commands[2]);
-          }
-          break;
-        case 'cred':
-          if (commands.length === 1) {
-            sendCredibilityMessage();
-          } else {
-            alterCredibility(selfIndex, parseInt(commands[1], 10));
-          }
+            break;
+          case 'cfo':
+          case 'dividends':
+          case 'tax':
+            performAction('dividends');
+            alterCredibility(selfIndex, 3);
+            break;
+          case 'block':
+          case 'counter':
+            if (commands.length > 2) {
+              $target.val(commands[2]);
+              switch (commands[1]) {
+                case 'cfo':
+                case 'stock':
+                case 'stock_options':
+                case 'foreign_aid':
+                  performAction('block_stock_options');
+                  break;
+                case '1up':
+                case 'one_upper':
+                case 'steal1up':
+                case 'steal_1up':
+                case 'steal_one_upper':
+                  performAction('block_steal_one_upper');
+                  break;
+                case 'vp':
+                case 'stealvp':
+                case 'steal_vp':
+                  performAction('block_steal_vp');
+                  break;
+                case 'hr':
+                case 'fire':
+                  performAction('block_fire');
+              }
+            }
+            break;
+          case '1up':
+          case 'one_upper':
+          case 'steal':
+            if (commands.length > 1) {
+              $target.val(commands[1]);
+              performAction('steal');
+              alterCredibility(selfIndex, 2);
+            }
+            break;
+          case 'vp':
+          case 'exchange':
+            performAction('exchange');
+            break;
+          case 'man':
+          case 'manager':
+          case 'fire':
+            if (commands.length > 1) {
+              $target.val(commands[1]);
+              performAction('fire');
+              alterCredibility(selfIndex, -3);
+            }
+            break;
+          case 'call':
+          case 'bs':
+          case 'call_bluff':
+            if (commands.length > 1) {
+              $target.val(commands[1]);
+              performAction('call_bluff');
+            }
+            break;
+          case 'card':
+            if (commands.length > 2) {
+              performCardAction(parseInt(commands[1] - 1, 10), commands[2]);
+            }
+            break;
+          case 'cred':
+          case 'credibility':
+            if (commands.length === 1) {
+              sendCredibilityMessage();
+            } else {
+              alterCredibility(selfIndex, parseInt(commands[1]), 10);
+            }
+            break;
+          case 'bluff':
+          case 'bluffed':
+            if (commands.length > 1) {
+              switch (commands[1]) {
+                case 'cfo':
+                  performAction('bluffed_cfo');
+                  break;
+                case '1up':
+                  performAction('bluffed_one_upper');
+                  break;
+                case 'vp':
+                  performAction('bluffed_vp');
+                  break;
+                case 'man':
+                  performAction('bluffed_manager');
+                  break;
+                case 'hr':
+                  performAction('bluffed_hr');
+              }
+            }
+            break;
+          case 'resign':
+          case 'quit':
+          case 'lost':
+          case 'out':
+            performAction('resign');
+            break;
+          case 'takeover':
+          case 'hostile_takeover':
+          case 'won':
+            performAction('hostile_takeover');
+        }
       }
     }
     return true;
   };
   performAction = function(action) {
     var targetText, text;
+    $target.collapse('hide');
     text = actions[action].text;
     if (actions[action].target) {
+      $target.trigger('focus');
       if ($target.val() !== '') {
         targetText = $target.val();
         text += " <strong class=\"text-primary\">" + targetText + "</strong>";
@@ -491,7 +549,10 @@ $(function() {
         currentAction = false;
       } else {
         currentAction = action;
-        $target.trigger('focus');
+        $target.collapse('show');
+        $target.on('shown.bs.collapse', function(event) {
+          return $target.trigger('focus');
+        });
         return false;
       }
     }
@@ -537,5 +598,6 @@ $(function() {
       return sendCardMessage(cardPositions[cardIndex], cards[card].title);
     }
   };
+  $('[data-toggle=tooltip]').tooltip();
   socket.emit('game:reset');
 });

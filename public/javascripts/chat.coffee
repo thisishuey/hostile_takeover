@@ -3,9 +3,9 @@ selfIndex = -1
 currentAction = off
 
 actions =
-	income:
-		title: 'Income'
-		text: 'takes <strong class="text-success">Income</strong>'
+	paycheck:
+		title: 'Paycheck'
+		text: 'takes <strong class="text-success">Paycheck</strong>'
 	stock_options:
 		title: 'Stock Options'
 		text: 'takes <strong class="text-success">Stock Options</strong>'
@@ -71,24 +71,24 @@ actions =
 		text: 'has <strong class="text-danger">Resigned</strong>'
 	hostile_takeover:
 		title: 'Hostile Takeover'
-		text: '<strong class="text-success">has WON HOSTILE TAKEOVER!!!</strong>'
+		text: '<strong class="text-success">WON HOSTILE TAKEOVER!!!</strong>'
 
 cardPositions = ['first card', 'second card']
 
 cards =
-	face_down:
+	down:
 		title: 'Face Down'
 		src: '/images/card_face_down.png'
 	cfo:
 		title: 'CFO'
 		src: '/images/card_cfo.png'
-	one_upper:
+	'1up':
 		title: 'One-Upper'
 		src: '/images/card_one_upper.png'
 	vp:
 		title: 'VP'
 		src: '/images/card_vp.png'
-	manager:
+	man:
 		title: 'Manager'
 		src: '/images/card_manager.png'
 	hr:
@@ -136,8 +136,8 @@ $ ->
 	$name = $('#name')
 	$field = $('#field')
 	$sendButton = $('#send')
-	$gainCredButton = $('#gainCredibility')
-	$loseCredButton = $('#loseCredibility')
+	$increaseCredibility = $('.increase-credibility')
+	$decreaseCredibility = $('.decrease-credibility')
 	$alterAction = $('.alter-action')
 	$target = $('#target')
 	$alterCard = $('.alter-card')
@@ -151,11 +151,11 @@ $ ->
 		windowFocus = no
 		yes
 
-	$gainCredButton.on 'click', (event) ->
+	$increaseCredibility.on 'click', (event) ->
 		alterCredibility(selfIndex, 1)
 		yes
 
-	$loseCredButton.on 'click', (event) ->
+	$decreaseCredibility.on 'click', (event) ->
 		alterCredibility(selfIndex, -1)
 		yes
 
@@ -304,62 +304,86 @@ $ ->
 
 	parseCLI = (commandString) ->
 		commandString = $.trim(commandString.replace(/:/g, ' '))
-		commands = commandString.split ' '
-		commands = $.grep commands, (n) -> n
-		if commands.length > 0
-			switch commands[0]
-				when 'income'
-					performAction('income')
-					alterCredibility(selfIndex, 1)
-				when 'stock_options', 'stock'
-					performAction('stock_options')
-					alterCredibility(selfIndex, 2)
-				when 'downsize', 'coup'
-					if commands.length > 1
-						$target.val(commands[1])
-						performAction('downsize')
-				when 'dividends', 'tax'
-					performAction('dividends')
-					alterCredibility(selfIndex, 3)
-				when 'block'
-					if commands.length > 2
-						$target.val(commands[2])
-						switch commands[1]
-							when 'cfo', 'stock', 'stock_options'
-								performAction('block_stock_options')
-							when '1up', 'steal1up'
-								performAction('block_steal_one_upper')
-							when 'vp', 'stealvp'
-								performAction('block_steal_vp')
-							when 'hr', 'fire'
-								performAction('block_fire')
-				when 'steal'
-					if commands.length > 1
-						$target.val(commands[1])
-						performAction('steal')
-				when 'exchange'
-					performAction('exchange')
-				when 'fire'
-					if commands.length > 1
-						$target.val(commands[1])
-						performAction('fire')
-				when 'bs'
-					if commands.length > 1
-						$target.val(commands[1])
-						performAction('call_bluff')
-				when 'card'
-					if commands.length > 2
-						performCardAction(parseInt(commands[1] - 1, 10), commands[2])
-				when 'cred'
-					if commands.length is 1
-						sendCredibilityMessage()
-					else
-						alterCredibility(selfIndex, parseInt commands[1], 10)
+		blocks = commandString.split('|')
+		for block in blocks
+			commands = $.trim(block).split(' ')
+			commands = $.grep(commands, (n) -> n)
+			if commands.length > 0
+				switch commands[0]
+					when 'paycheck', 'income'
+						performAction('paycheck')
+						alterCredibility(selfIndex, 1)
+					when 'stock', 'stock_options', 'foreign_aid'
+						performAction('stock_options')
+						alterCredibility(selfIndex, 2)
+					when 'downsize', 'coup'
+						if commands.length > 1
+							$target.val(commands[1])
+							performAction('downsize')
+							alterCredibility(selfIndex, -7)
+					when 'cfo', 'dividends', 'tax'
+						performAction('dividends')
+						alterCredibility(selfIndex, 3)
+					when 'block', 'counter'
+						if commands.length > 2
+							$target.val(commands[2])
+							switch commands[1]
+								when 'cfo', 'stock', 'stock_options', 'foreign_aid'
+									performAction('block_stock_options')
+								when '1up', 'one_upper', 'steal1up', 'steal_1up', 'steal_one_upper'
+									performAction('block_steal_one_upper')
+								when 'vp', 'stealvp', 'steal_vp'
+									performAction('block_steal_vp')
+								when 'hr', 'fire'
+									performAction('block_fire')
+					when '1up', 'one_upper', 'steal'
+						if commands.length > 1
+							$target.val(commands[1])
+							performAction('steal')
+							alterCredibility(selfIndex, 2)
+					when 'vp', 'exchange'
+						performAction('exchange')
+					when 'man', 'manager', 'fire'
+						if commands.length > 1
+							$target.val(commands[1])
+							performAction('fire')
+							alterCredibility(selfIndex, -3)
+					when 'call', 'bs', 'call_bluff'
+						if commands.length > 1
+							$target.val(commands[1])
+							performAction('call_bluff')
+					when 'card'
+						if commands.length > 2
+							performCardAction(parseInt(commands[1] - 1, 10), commands[2])
+					when 'cred', 'credibility'
+						if commands.length is 1
+							sendCredibilityMessage()
+						else
+							alterCredibility(selfIndex, parseInt(commands[1]), 10)
+					when 'bluff', 'bluffed'
+						if commands.length > 1
+							switch commands[1]
+								when 'cfo'
+									performAction('bluffed_cfo')
+								when '1up'
+									performAction('bluffed_one_upper')
+								when 'vp'
+									performAction('bluffed_vp')
+								when 'man'
+									performAction('bluffed_manager')
+								when 'hr'
+									performAction('bluffed_hr')
+					when 'resign', 'quit', 'lost', 'out'
+						performAction('resign')
+					when 'takeover', 'hostile_takeover', 'won'
+						performAction('hostile_takeover')
 		yes
 
 	performAction = (action) ->
+		$target.collapse('hide')
 		text = actions[action].text
 		if actions[action].target
+			$target.trigger('focus')
 			if $target.val() isnt ''
 				targetText = $target.val()
 				text += " <strong class=\"text-primary\">#{targetText}</strong>"
@@ -367,14 +391,15 @@ $ ->
 				currentAction = off
 			else
 				currentAction = action
-				$target.trigger('focus')
+				$target.collapse('show')
+				$target.on 'shown.bs.collapse', (event) ->
+					$target.trigger('focus')
 				return no
 		if actions[action].credibility
 			# credibilityText = $("#player-#{selfIndex} .credibility").text()
 			# text += " <strong class=\"text-success\">#{credibilityText}</strong>"
 			sendCredibilityMessage()
 		sendActionMessage(text)
-
 
 	$alterAction.on 'click', (event) ->
 		event.preventDefault()
@@ -401,6 +426,8 @@ $ ->
 		if cardPositions[cardIndex] and cards[card]
 			socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: cards[card].src})
 			sendCardMessage(cardPositions[cardIndex], cards[card].title)
+
+	$('[data-toggle=tooltip]').tooltip()
 
 	socket.emit('game:reset')
 

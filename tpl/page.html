@@ -167,14 +167,14 @@
 						<div class="col-sm-offset-3 col-sm-6">
 							<div class="input-group">
 								<div class="input-group-btn">
-									<button type="button" class="btn btn-default" id="loseCredibility">
-										<span class="glyphicon glyphicon-chevron-down"></span>
+									<button type="button" class="btn btn-default decrease-credibility">
+										<span class="glyphicon glyphicon-minus"></span>
 									</button>
-									<button type="button" class="btn btn-default" id="gainCredibility">
-										<span class="glyphicon glyphicon-chevron-up"></span>
+									<button type="button" class="btn btn-default increase-credibility">
+										<span class="glyphicon glyphicon-plus"></span>
 									</button>
 								</div>
-								<input type="text" class="form-control" id="field" placeholder="Enter Your Message or Send Blank to Report Score">
+								<input type="text" class="form-control" id="field" placeholder="Enter Your Message or Short Code">
 								<div class="input-group-btn">
 									<button type="button" class="btn btn-primary" id="send">
 										<span class="glyphicon glyphicon-send"></span>
@@ -191,17 +191,16 @@
 
 			<!-- Actions Modal -->
 			<div class="modal fade" id="actionsModal" tabindex="-1" role="dialog" aria-labelledby="actionsModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-lg">
+				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 							<h4 class="modal-title" id="actionsModalLabel">Available Actions</h4>
 						</div>
 						<div class="modal-body">
-							<input type="text" class="form-control" id="target" placeholder="Enter Your Target's Name">
-							<h5>Primary Actions</h5>
+							<input type="text" class="form-control collapse" id="target" placeholder="Enter Your Target's Name">
 							<div class="table-responsive">
-									<table class="table table-striped">
+								<table class="table table-striped table-condensed">
 									<thead>
 										<tr>
 											<th class="col-sm-2">Position</th>
@@ -213,56 +212,109 @@
 									<tbody>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="income" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Income</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="paycheck" data-toggle="tooltip" title=":paycheck">Paycheck</button></td>
 											<td>-</td>
 											<td>Gain 1 Credibility</td>
 										</tr>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="stock_options">Stock Options</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="stock_options" data-toggle="tooltip" title=":stock">Stock Options</button></td>
 											<td>-</td>
 											<td>Gain 2 Credibility</td>
 										</tr>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="downsize">Downsize</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="downsize" data-toggle="tooltip" title=":downsize <target>">Downsize</button></td>
 											<td>-</td>
 											<td>Pay 7 Credibility and target Player loses 1 Influence</td>
 										</tr>
 										<tr>
 											<td>CFO</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="dividends">Dividends</button></td>
-											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_stock_options">Block Stock Options</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="dividends" data-toggle="tooltip" title=":cfo">Dividends</button></td>
+											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_stock_options" data-toggle="tooltip" title=":block cfo <target>">Block Stock Options</button></td>
 											<td>Gain 3 Credibility</td>
 										</tr>
 										<tr>
 											<td>One-Upper</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="steal">Steal</button></td>
-											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_steal_one_upper">Block Steal</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="steal" data-toggle="tooltip" title=":1up <target>">Steal</button></td>
+											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_steal_one_upper" data-toggle="tooltip" title=":block 1up <target>">Block Steal</button></td>
 											<td>Take 2 Credibility from target Player</td>
 										</tr>
 										<tr>
 											<td>VP</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="exchange">Exchange</button></td>
-											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_steal_vp">Block Steal</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="exchange" data-toggle="tooltip" title=":vp">Exchange</button></td>
+											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_steal_vp" data-toggle="tooltip" title=":block vp <target>">Block Steal</button></td>
 											<td>Exchange Positions with Corporate Deck</td>
 										</tr>
 										<tr>
 											<td>Manager</td>
-											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="fire">Fire</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="fire" data-toggle="tooltip" title=":man <target>">Fire</button></td>
 											<td>-</td>
 											<td>Pay 3 Credibility and target Player loses 1 Influence</td>
 										</tr>
 										<tr>
 											<td>HR</td>
 											<td>-</td>
-											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_fire">Block Fire</button></td>
+											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="block_fire" data-toggle="tooltip" title=":block hr <target>">Block Fire</button></td>
 											<td>-</td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
-							<h5>Additional Actions</h5>
+							<div class="btn-group dropup">
+								<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+									Change 1st Card <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="down" data-toggle="tooltip" title=":card 1 down">Face Down</a></li>
+									<li class="divider"></li>
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="cfo" data-toggle="tooltip" title=":card 1 cfo">CFO</a></li>
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="1up" data-toggle="tooltip" title=":card 1 1up">One-Upper</a></li>
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="vp" data-toggle="tooltip" title=":card 1 vp">VP</a></li>
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="man" data-toggle="tooltip" title=":card 1 man">Manager</a></li>
+									<li><a href="#" class="alter-card" data-card-index="0" data-card="hr" data-toggle="tooltip" title=":card 1 hr">HR</a></li>
+								</ul>
+							</div>
+							<div class="btn-group dropup">
+								<button type="button" class="btn btn-default btn-xs btn-block dropdown-toggle" data-toggle="dropdown">
+									Change 2nd Card <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="down" data-toggle="tooltip" title=":card 2 down">Face Down</a></li>
+									<li class="divider"></li>
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="cfo" data-toggle="tooltip" title=":card 2 cfo">CFO</a></li>
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="1up" data-toggle="tooltip" title=":card 2 1up">One-Upper</a></li>
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="vp" data-toggle="tooltip" title=":card 2 vp">VP</a></li>
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="man" data-toggle="tooltip" title=":card 2 man">Manager</a></li>
+									<li><a href="#" class="alter-card" data-card-index="1" data-card="hr" data-toggle="tooltip" title=":card 2 hr">HR</a></li>
+								</ul>
+							</div>
+							<div class="btn-group dropup">
+								<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+									Manage Credibility <span class="caret"></span>
+								</button>
+									<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class="increase-credibility" data-toggle="tooltip" title=":cred <number>">Increase Credibility</a></li>
+									<li><a href="#" class="decrease-credibility" data-toggle="tooltip" title=":cred <negative number>">Decrease Credibility</a></li>
+									<li class="divider"></li>
+									<li><a href="#" class="alter-action" data-action="report_credibility" data-toggle="tooltip" title=":cred">Report Credibility</a></li>
+								</ul>
+							</div>
+							<div class="btn-group dropup">
+								<button type="button" class="btn btn-default btn-xs btn-block dropdown-toggle" data-toggle="dropdown">
+									Call/Bluff <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#" class="alter-action" data-action="bluffed_cfo" data-toggle="tooltip" title=":bluff cfo">CFO</a></li>
+									<li><a href="#" class="alter-action" data-action="bluffed_one_upper" data-toggle="tooltip" title=":bluff 1up">One-Upper</a></li>
+									<li><a href="#" class="alter-action" data-action="bluffed_vp" data-toggle="tooltip" title=":bluff vp">VP</a></li>
+									<li><a href="#" class="alter-action" data-action="bluffed_manager" data-toggle="tooltip" title=":bluff man">Manager</a></li>
+									<li><a href="#" class="alter-action" data-action="bluffed_hr" data-toggle="tooltip" title=":bluff hr">HR</a></li>
+									<li class="divider"></li>
+									<li><a href="#" class="alter-action" data-action="call_bluff" data-toggle="tooltip" title=":call <target>">Call Bluff</a></li>
+								</ul>
+							</div>
+							<!--
 							<div class="table-responsive">
 								<table class="table table-striped">
 									<thead>
@@ -320,75 +372,64 @@
 											<td>-</td>
 											<td>Change your second card</td>
 										</tr>
-										<!-- <tr>
+										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block" id="gainCredibility">Increase Credibility</button></td>
+											<td class="text-center">
+												<div class="btn-group">
+													<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+														Manage Credibility <span class="caret"></span>
+													</button>
+  													<ul class="dropdown-menu" role="menu">
+														<li><a href="#" class="alter-action" data-action="report_credibility">Report Credibility</a></li>
+														<li><a href="#" class="increase-credibility">Increase Credibility</a></li>
+														<li><a href="#" class="decrease-credibility">Decrease Credibility</a></li>
+													</ul>
+												</div>
+											</td>
 											<td>-</td>
-											<td>Increase your Credibility by 1</td>
+											<td>Report and manage your credibility</td>
 										</tr>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block" id="loseCredibility">Decrease Credibility</button></td>
-											<td>-</td>
-											<td>Decrease your Credibility by 1</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="report_credibility">Report Credibility</button></td>
-											<td>-</td>
-											<td>Report your credibility to the game logs</td>
-										</tr> -->
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="call_bluff">Call Bluff</button></td>
-											<td>-</td>
-											<td>Call target Player's bluff</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="bluffed_cfo">Bluffed CFO</button></td>
+											<td class="text-center">
+												<div class="btn-group">
+													<button type="button" class="btn btn-default btn-xs btn-block dropdown-toggle" data-toggle="dropdown">
+														Call/Bluff <span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu" role="menu">
+														<li><a href="#" class="alter-action" data-action="call_bluff">Call Bluff</a></li>
+														<li class="divider"></li>
+														<li><a href="#" class="alter-action" data-action="bluffed_cfo">CFO</a></li>
+														<li><a href="#" class="alter-action" data-action="bluffed_one_upper">One-Upper</a></li>
+														<li><a href="#" class="alter-action" data-action="bluffed_vp">VP</a></li>
+														<li><a href="#" class="alter-action" data-action="bluffed_manager">Manager</a></li>
+														<li><a href="#" class="alter-action" data-action="bluffed_hr">HR</a></li>
+													</ul>
+												</div>
+											</td>
 											<td>-</td>
 											<td>Reveal one card</td>
 										</tr>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="bluffed_one_upper">Bluffed One-Upper</button></td>
-											<td>-</td>
-											<td>Reveal one card</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="bluffed_vp">Bluffed VP</button></td>
-											<td>-</td>
-											<td>Reveal one card</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="bluffed_manager">Bluffed Manager</button></td>
-											<td>-</td>
-											<td>Reveal one card</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="bluffed_hr">Bluffed HR</button></td>
-											<td>-</td>
-											<td>Reveal one card</td>
-										</tr>
-										<tr>
-											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="resign">Resign</button></td>
+											<td><button type="button" class="btn btn-danger btn-xs btn-block alter-action" data-action="resign">Resign</button></td>
 											<td>-</td>
 											<td>Both cards revealed, you have resigned</td>
 										</tr>
 										<tr>
 											<td>-</td>
-											<td><button type="button" class="btn btn-default btn-xs btn-block alter-action" data-action="hostile_takeover">HOSTILE TAKEOVER</button></td>
+											<td><button type="button" class="btn btn-success btn-xs btn-block alter-action" data-action="hostile_takeover">HOSTILE TAKEOVER</button></td>
 											<td>-</td>
 											<td>All other players are out, YOU WIN!!!</td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
+							-->
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger alter-action" data-action="resign">I QUIT!</button>
+							<button type="button" class="btn btn-success alter-action" data-action="hostile_takeover">HOSTILE TAKEOVER!!!</button>
 						</div>
 					</div>
 				</div>
