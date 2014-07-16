@@ -323,7 +323,7 @@ $ ->
 				when 'bs'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction 'call_bluff'
+						performAction('call_bluff')
 				when 'card'
 					if commands.length > 2
 						performCardAction(parseInt(commands[1] - 1, 10), commands[2])
@@ -333,27 +333,27 @@ $ ->
 					else
 						alterCredibility(selfIndex, parseInt commands[1], 10)
 				when 'dividends', 'tax'
-					performAction 'dividends'
+					performAction('dividends')
 					alterCredibility(selfIndex, 3)
 				when 'downsize', 'coup'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction 'downsize'
+						performAction('downsize')
 				when 'exchange'
-					performAction 'exchange'
+					performAction('exchange')
 				when 'fire'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction 'fire'
+						performAction('fire')
 				when 'income'
-					performAction 'income'
+					performAction('income')
 					alterCredibility(selfIndex, 1)
 				when 'steal'
 					if commands.length > 1
 						$target.val(commands[1])
-						performAction 'steal'
+						performAction('steal')
 				when 'stock_options', 'stock'
-					performAction 'stock_options'
+					performAction('stock_options')
 					alterCredibility(selfIndex, 2)
 		yes
 
