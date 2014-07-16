@@ -428,7 +428,6 @@ $ ->
 			sendCardMessage(cardPositions[cardIndex], cards[card].title)
 
 	$('[data-toggle=tooltip]').tooltip()
-
 	socket.emit('game:reset')
 
 	return
