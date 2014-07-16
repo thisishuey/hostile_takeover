@@ -400,6 +400,27 @@ $(function() {
     });
     if (commands.length > 0) {
       switch (commands[0]) {
+        case 'income':
+          performAction('income');
+          alterCredibility(selfIndex, 1);
+          break;
+        case 'stock_options':
+        case 'stock':
+          performAction('stock_options');
+          alterCredibility(selfIndex, 2);
+          break;
+        case 'downsize':
+        case 'coup':
+          if (commands.length > 1) {
+            $target.val(commands[1]);
+            performAction('downsize');
+          }
+          break;
+        case 'dividends':
+        case 'tax':
+          performAction('dividends');
+          alterCredibility(selfIndex, 3);
+          break;
         case 'block':
           if (commands.length > 2) {
             $target.val(commands[2]);
@@ -423,6 +444,21 @@ $(function() {
             }
           }
           break;
+        case 'steal':
+          if (commands.length > 1) {
+            $target.val(commands[1]);
+            performAction('steal');
+          }
+          break;
+        case 'exchange':
+          performAction('exchange');
+          break;
+        case 'fire':
+          if (commands.length > 1) {
+            $target.val(commands[1]);
+            performAction('fire');
+          }
+          break;
         case 'bs':
           if (commands.length > 1) {
             $target.val(commands[1]);
@@ -440,42 +476,6 @@ $(function() {
           } else {
             alterCredibility(selfIndex, parseInt(commands[1], 10));
           }
-          break;
-        case 'dividends':
-        case 'tax':
-          performAction('dividends');
-          alterCredibility(selfIndex, 3);
-          break;
-        case 'downsize':
-        case 'coup':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('downsize');
-          }
-          break;
-        case 'exchange':
-          performAction('exchange');
-          break;
-        case 'fire':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('fire');
-          }
-          break;
-        case 'income':
-          performAction('income');
-          alterCredibility(selfIndex, 1);
-          break;
-        case 'steal':
-          if (commands.length > 1) {
-            $target.val(commands[1]);
-            performAction('steal');
-          }
-          break;
-        case 'stock_options':
-        case 'stock':
-          performAction('stock_options');
-          alterCredibility(selfIndex, 2);
       }
     }
     return true;
