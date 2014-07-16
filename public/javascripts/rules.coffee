@@ -19,20 +19,14 @@ alterCredibility = (playerIndex, amount) ->
 	io.connect(window.location.origin).emit("game:alterCredibility", {playerIndex: playerIndex, amount: amount})
 	yes
 
-# increaseCredibility = (playerIndex, amount) ->
-# 	io.connect(window.location.origin).emit("game:alterCredibility", {playerIndex: playerIndex, amount: amount})
-# 	yes
-
-# decreaseCredibility = (playerIndex, amount) ->
-# 	io.connect(window.location.origin).emit("game:alterCredibility", {playerIndex: playerIndex, amount: amount * -1})
-# 	yes
-
 income = (playerIndex) ->
-	alterCredibility(playerIndex, -1)
+	alterCredibility(playerIndex, 1)
 	yes
 
 stockOptions = ->
+	alterCredibility(playerIndex, 2)
 	yes
 
 downsize = ->
+	alterCredibility(playerIndex, -7)
 	yes

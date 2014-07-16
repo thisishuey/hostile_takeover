@@ -10,14 +10,16 @@ alterCredibility = function(playerIndex, amount) {
 };
 
 income = function(playerIndex) {
-  alterCredibility(playerIndex, -1);
+  alterCredibility(playerIndex, 1);
   return true;
 };
 
 stockOptions = function() {
+  alterCredibility(playerIndex, 2);
   return true;
 };
 
 downsize = function() {
+  alterCredibility(playerIndex, -7);
   return true;
 };
