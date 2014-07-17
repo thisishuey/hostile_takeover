@@ -23,7 +23,7 @@ io.sockets.on 'connection', (socket) ->
 
 	socket.on 'game:reset', (data = {}) ->
 		players = []
-		io.sockets.emit('board:update', {players: players})
+		updateBoard()
 
 	socket.on 'game:join', (data = {}) ->
 		if data.name
@@ -34,24 +34,28 @@ io.sockets.on 'connection', (socket) ->
 				credibility: 2
 				active: players.length < 1
 			players.push(player)
-			io.sockets.emit('board:update', {players: players})
+			updateBoard()
 
 	socket.on 'game:start', (data = {}) ->
 		io.sockets.emit('game:start', data)
-		io.sockets.emit('board:update', {players: players})
+		updateBoard()
 
 	socket.on 'game:alterCard', (data = {}) ->
 		if data.playerIndex isnt null and data.cardIndex isnt null and data.src isnt null
 			players[data.playerIndex].cards[data.cardIndex] = data.src
-			io.sockets.emit('board:update', {players: players})
+			updateBoard()
 
 	socket.on 'game:alterCredibility', (data = {}) ->
 		if data.playerIndex isnt null and data.amount isnt null
 			if data.amount >= 0 or data.amount * -1 <= players[data.playerIndex].credibility
 				players[data.playerIndex].credibility += data.amount
-			io.sockets.emit('board:update', {players: players})
+			updateBoard()
 		yes
 
+	yes
+
+updateBoard = () ->
+	io.sockets.emit('board:update', {players: players})
 	yes
 
 console.log("Listening on port #{port}")
