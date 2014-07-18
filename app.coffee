@@ -77,6 +77,14 @@ io.sockets.on 'connection', (socket) ->
 			io.sockets.emit('message', {username: player.name, message: "<em>changed #{cardPositions[cardPosition]} to <strong class=\"text-success\">#{card.title}</strong></em>"})
 			updateBoard()
 
+	socket.on 'game:action', (data = {}) ->
+		if data.playerIndex isnt null
+			updateBoard()
+
+	socket.on 'game:counterAction', (data = {}) ->
+		if data.playerIndex isnt null
+			updateBoard()
+
 	socket.on 'game:alterCredibility', (data = {}) ->
 		if data.playerIndex isnt null and data.amount isnt null
 			if data.amount >= 0 or data.amount * -1 <= players[data.playerIndex].credibility

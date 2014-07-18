@@ -122,6 +122,22 @@ io.sockets.on('connection', function(socket) {
       return updateBoard();
     }
   });
+  socket.on('game:action', function(data) {
+    if (data == null) {
+      data = {};
+    }
+    if (data.playerIndex !== null) {
+      return updateBoard();
+    }
+  });
+  socket.on('game:counterAction', function(data) {
+    if (data == null) {
+      data = {};
+    }
+    if (data.playerIndex !== null) {
+      return updateBoard();
+    }
+  });
   socket.on('game:alterCredibility', function(data) {
     if (data == null) {
       data = {};
