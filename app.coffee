@@ -1,9 +1,32 @@
 express = require('express')
 app = express()
 port = 4839
-# testing github
+
 players = []
 activeID = 0
+cardPositions = ['first card', 'second card']
+cards =
+	blank:
+		title: 'Blank'
+		source: '/images/card_blank.png'
+	face_down:
+		title: 'Face Down'
+		source: '/images/card_face_down.png'
+	cfo:
+		title: 'CFO'
+		source: '/images/card_cfo.png'
+	one_upper:
+		title: 'One-Upper'
+		source: '/images/card_one_upper.png'
+	vp:
+		title: 'VP'
+		source: '/images/card_vp.png'
+	manager:
+		title: 'Manager'
+		source: '/images/card_manager.png'
+	hr:
+		title: 'HR'
+		source: '/images/card_hr.png'
 
 app.set('views', "#{__dirname}/tpl")
 app.set('view engine', 'html')
@@ -30,7 +53,7 @@ io.sockets.on 'connection', (socket) ->
 			name = data.name
 			player =
 				name: name
-				cards: ['/images/card_face_down.png', '/images/card_face_down.png']
+				cards: [cards.face_down.source, cards.face_down.source]
 				credibility: 2
 				active: players.length < 1
 			players.push(player)
@@ -41,8 +64,17 @@ io.sockets.on 'connection', (socket) ->
 		updateBoard()
 
 	socket.on 'game:alterCard', (data = {}) ->
-		if data.playerIndex isnt null and data.cardIndex isnt null and data.src isnt null
-			players[data.playerIndex].cards[data.cardIndex] = data.src
+		if data.playerIndex isnt null and data.cardIndex isnt null
+			player = players[data.playerIndex]
+			card = cards[data.cardIndex]
+			cardPosition = 0
+			if data.cardPosition isnt no
+				console.log(data.cardPosition)
+				cardPosition = data.cardPosition
+			else if player.cards[cardPosition] isnt cards.face_down.source
+				cardPosition = 1
+			player.cards[cardPosition] = card.source
+			io.sockets.emit('message', {username: player.name, message: "<em>changed #{cardPositions[cardPosition]} to <strong class=\"text-success\">#{card.title}</strong></em>"})
 			updateBoard()
 
 	socket.on 'game:alterCredibility', (data = {}) ->
