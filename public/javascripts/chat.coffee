@@ -98,13 +98,9 @@ cards =
 		title: 'Blank'
 		src: '/images/card_blank.png'
 
-String::startsWith ?= (s) -> @slice(0, s.length) is s
-
-htmlEntities = (string) ->
-	String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-
-stripTags = (string) ->
-	String(string).replace(/(<([^>]+)>)/ig,"")
+String::startsWith ?= (string) -> @slice(0, string.length) is string
+String::htmlEntities ?= -> String(this).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+String::stripTags ?= -> String(string).replace(/(<([^>]+)>)/ig, '')
 
 pageTitleNotification =
 	vars:
@@ -171,7 +167,7 @@ $ ->
 			$content.scrollTop($content.prop('scrollHeight'))
 			if data.username and username isnt name and not windowFocus
 				pageTitleNotification.off()
-				pageTitleNotification.on("#{username}: #{stripTags(text)}", 1500)
+				pageTitleNotification.on("#{username}: #{text.stripTags()}", 1500)
 		else
 			console.log("There is a problem: #{data}")
 		yes
@@ -250,7 +246,7 @@ $ ->
 		if $username.val() is ''
 			alert('Please enter your name!')
 		else
-			name = htmlEntities($username.val())
+			name = $username.val().htmlEntities()
 			$name.html(name)
 			socket.emit('send', {message: "<em>#{name} joined the game</em>"})
 			socket.emit('game:join', {name: name})
@@ -277,7 +273,7 @@ $ ->
 		else if $field.val().startsWith(":")
 			parseCLI($field.val())
 		else
-			text = htmlEntities($field.val())
+			text = $field.val().htmlEntities()
 			socket.emit('send', {username: name, message: text})
 		$field.val('')
 		$field.trigger('focus')
