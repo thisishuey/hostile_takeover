@@ -6,9 +6,9 @@ actions =
 	paycheck:
 		title: 'Paycheck'
 		text: 'takes <strong class="text-success">Paycheck</strong>'
-	stock_options:
-		title: 'Stock Options'
-		text: 'takes <strong class="text-success">Stock Options</strong>'
+	bonus:
+		title: 'Bonus'
+		text: 'takes <strong class="text-success">Bonus</strong>'
 	downsize:
 		title: 'Downsize'
 		target: yes
@@ -16,10 +16,10 @@ actions =
 	dividends:
 		title: 'Dividends'
 		text: 'takes <strong class="text-success">Dividends</strong>'
-	block_stock_options:
-		title: 'Block Stock Options'
+	block_bonus:
+		title: 'Block Bonus'
 		target: yes
-		text: 'blocks <strong class="text-danger">Stock Options</strong> on'
+		text: 'blocks <strong class="text-danger">Bonus</strong> on'
 	steal:
 		title: 'Steal'
 		target: yes
@@ -135,6 +135,7 @@ $ ->
 	$increaseCredibility = $('.increase-credibility')
 	$decreaseCredibility = $('.decrease-credibility')
 	$alterAction = $('.alter-action')
+	$confirmAction = $('.confirm-action')
 	$target = $('#target')
 	$alterCard = $('.alter-card')
 
@@ -309,8 +310,8 @@ $ ->
 					when 'paycheck', 'income'
 						performAction('paycheck')
 						alterCredibility(selfIndex, 1)
-					when 'stock', 'stock_options', 'foreign_aid'
-						performAction('stock_options')
+					when 'bonus', 'foreign_aid'
+						performAction('bonus')
 						alterCredibility(selfIndex, 2)
 					when 'downsize', 'coup'
 						if commands.length > 1
@@ -324,8 +325,8 @@ $ ->
 						if commands.length > 2
 							$target.val(commands[2])
 							switch commands[1]
-								when 'cfo', 'stock', 'stock_options', 'foreign_aid'
-									performAction('block_stock_options')
+								when 'cfo', 'bonus', 'foreign_aid'
+									performAction('block_bonus')
 								when '1up', 'one_upper', 'steal1up', 'steal_1up', 'steal_one_upper'
 									performAction('block_steal_one_upper')
 								when 'vp', 'stealvp', 'steal_vp'
@@ -398,10 +399,46 @@ $ ->
 		sendActionMessage(text)
 
 	$alterAction.on 'click', (event) ->
+		show = no
+		$that = $(this)
+		$modal = $('#confirmAction')
+		actionName = $that.attr('data-action')
+		action = actions[actionName]
+
+		if action.target
+			if $that.hasClass('players')
+				if $that.attr('data-action')
+					$('.players').removeAttr('data-action')
+					$target.val($that.find('.panel-title').html())
+					show = yes
+			else
+				$('.players').attr('data-action', actionName)
+				$('.alert').alert()
+		else
+			show = yes
+
+		if show
+			text = 'Would you like to take the action ' + action.title
+			if action.target then text += ' against ' + $target.val()
+			text += '?'
+			$modal.find('.modal-body').text(text)
+			$modal.find('.confirm-action').attr('data-action', actionName)
+			$('#confirmAction').modal('show')
+
+		yes
+
+	$confirmAction.on 'click', (event) ->
 		event.preventDefault()
 		$that = $(this)
-		action = $that.data('action')
-		performAction(action)
+		action = $that.attr('data-action')
+
+		$('.players').removeAttr('data-action')
+		if $that.hasClass('players') and $that.attr('data-action')
+				$target.val($that.find('.panel-title').html())
+
+		if action
+			performAction(action)
+		yes
 
 	$target.on 'keydown', (event) ->
 		if event.keyCode is 13 and currentAction

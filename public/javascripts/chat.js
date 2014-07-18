@@ -12,9 +12,9 @@ actions = {
     title: 'Paycheck',
     text: 'takes <strong class="text-success">Paycheck</strong>'
   },
-  stock_options: {
-    title: 'Stock Options',
-    text: 'takes <strong class="text-success">Stock Options</strong>'
+  bonus: {
+    title: 'Bonus',
+    text: 'takes <strong class="text-success">Bonus</strong>'
   },
   downsize: {
     title: 'Downsize',
@@ -25,10 +25,10 @@ actions = {
     title: 'Dividends',
     text: 'takes <strong class="text-success">Dividends</strong>'
   },
-  block_stock_options: {
-    title: 'Block Stock Options',
+  block_bonus: {
+    title: 'Block Bonus',
     target: true,
-    text: 'blocks <strong class="text-danger">Stock Options</strong> on'
+    text: 'blocks <strong class="text-danger">Bonus</strong> on'
   },
   steal: {
     title: 'Steal',
@@ -174,7 +174,7 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $alterAction, $alterCard, $content, $decreaseCredibility, $field, $increaseCredibility, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $target, $username, $window, joinGame, logs, parseCLI, performAction, performCardAction, sendActionMessage, sendCardMessage, sendCredibilityMessage, sendMessage, socket, windowFocus;
+  var $alterAction, $alterCard, $confirmAction, $content, $decreaseCredibility, $field, $increaseCredibility, $joinButton, $joinGame, $name, $playGame, $sendButton, $startButton, $startGame, $target, $username, $window, joinGame, logs, parseCLI, performAction, performCardAction, sendActionMessage, sendCardMessage, sendCredibilityMessage, sendMessage, socket, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(location.origin);
@@ -192,6 +192,7 @@ $(function() {
   $increaseCredibility = $('.increase-credibility');
   $decreaseCredibility = $('.decrease-credibility');
   $alterAction = $('.alter-action');
+  $confirmAction = $('.confirm-action');
   $target = $('#target');
   $alterCard = $('.alter-card');
   $window.on('focus', function(event) {
@@ -412,10 +413,9 @@ $(function() {
             performAction('paycheck');
             alterCredibility(selfIndex, 1);
             break;
-          case 'stock':
-          case 'stock_options':
+          case 'bonus':
           case 'foreign_aid':
-            performAction('stock_options');
+            performAction('bonus');
             alterCredibility(selfIndex, 2);
             break;
           case 'downsize':
@@ -438,10 +438,9 @@ $(function() {
               $target.val(commands[2]);
               switch (commands[1]) {
                 case 'cfo':
-                case 'stock':
-                case 'stock_options':
+                case 'bonus':
                 case 'foreign_aid':
-                  performAction('block_stock_options');
+                  performAction('block_bonus');
                   break;
                 case '1up':
                 case 'one_upper':
@@ -566,11 +565,51 @@ $(function() {
     return sendActionMessage(text);
   };
   $alterAction.on('click', function(event) {
+    var $modal, $that, action, actionName, show, text;
+    show = false;
+    $that = $(this);
+    $modal = $('#confirmAction');
+    actionName = $that.attr('data-action');
+    action = actions[actionName];
+    if (action.target) {
+      if ($that.hasClass('players')) {
+        if ($that.attr('data-action')) {
+          $('.players').removeAttr('data-action');
+          $target.val($that.find('.panel-title').html());
+          show = true;
+        }
+      } else {
+        $('.players').attr('data-action', actionName);
+        $('.alert').alert();
+      }
+    } else {
+      show = true;
+    }
+    if (show) {
+      text = 'Would you like to take the action ' + action.title;
+      if (action.target) {
+        text += ' against ' + $target.val();
+      }
+      text += '?';
+      $modal.find('.modal-body').text(text);
+      $modal.find('.confirm-action').attr('data-action', actionName);
+      $('#confirmAction').modal('show');
+    }
+    return true;
+  });
+  $confirmAction.on('click', function(event) {
     var $that, action;
     event.preventDefault();
     $that = $(this);
-    action = $that.data('action');
-    return performAction(action);
+    action = $that.attr('data-action');
+    $('.players').removeAttr('data-action');
+    if ($that.hasClass('players') && $that.attr('data-action')) {
+      $target.val($that.find('.panel-title').html());
+    }
+    if (action) {
+      performAction(action);
+    }
+    return true;
   });
   $target.on('keydown', function(event) {
     if (event.keyCode === 13 && currentAction) {

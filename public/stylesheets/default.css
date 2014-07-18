@@ -8,3 +8,13 @@
 	font-weight: bold;
 	text-align: center;
 }
+
+.row-buffer {
+	margin-bottom: 20px;
+}
+
+.alert-fixed {
+	position: fixed;
+	width: 100%;
+	text-align: center;
+}
