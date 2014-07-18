@@ -1,3 +1,4 @@
+debug = on
 name = ''
 selfIndex = -1
 currentAction = off
@@ -209,7 +210,7 @@ $ ->
 					if selfIndex < 0 and player.name is name
 						selfIndex = playerIndex
 
-				if players.length < 2
+				if players.length < 2 and not debug
 					$startButton.prop('disabled', yes)
 				else
 					$startButton.prop('disabled', no)
@@ -408,20 +409,16 @@ $ ->
 			$("[data-action=#{currentAction}]").trigger('click')
 		yes
 
-	sendCardMessage = (position, card) ->
-		socket.emit('send', {username: name, message: "<em>changed #{position} to <strong class=\"text-success\">#{card}</strong></em>"})
-		$('#actionsModal').modal('hide')
+	performCardAction = (cardIndex, cardPosition = no) ->
+		socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, cardPosition: cardPosition})
 
 	$alterCard.on 'click', (event) ->
 		event.preventDefault()
 		$that = $(this)
 		cardIndex = $that.data('card-index')
-		card = $that.data('card')
-
-	performCardAction = (cardIndex, card) ->
-		if cardPositions[cardIndex] and cards[card]
-			socket.emit('game:alterCard', {playerIndex: selfIndex, cardIndex: cardIndex, src: cards[card].src})
-			sendCardMessage(cardPositions[cardIndex], cards[card].title)
+		cardPosition = $that.data('card-position')
+		performCardAction(cardIndex, cardPosition)
+		$('#actionsModal').modal('hide')
 
 	$('[data-toggle=tooltip]').tooltip()
 	socket.emit('game:reset')
