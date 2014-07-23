@@ -1,4 +1,4 @@
-debug = on
+debug = off
 name = ''
 selfIndex = -1
 currentAction = off
@@ -351,8 +351,21 @@ $ ->
 							$target.val(commands[1])
 							performAction('call_bluff')
 					when 'card'
+						if commands.length > 1
+							cardPosition = no
+							cardIndex = commands[1]
 						if commands.length > 2
-							performCardAction(parseInt(commands[1] - 1, 10), commands[2])
+							cardPosition = parseInt(commands[1] - 1, 10)
+							cardIndex = commands[2]
+						switch cardIndex
+							when 'down'
+								cardIndex = 'face_down'
+							when '1up'
+								cardIndex = 'one_upper'
+							when 'man'
+								cardIndex = 'manager'
+						if cardIndex?
+							performCardAction(cardIndex, cardPosition)
 					when 'cred', 'credibility'
 						if commands.length is 1
 							sendCredibilityMessage()

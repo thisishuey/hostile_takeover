@@ -109,7 +109,6 @@ io.sockets.on('connection', function(socket) {
       card = cards[data.cardIndex];
       cardPosition = 0;
       if (data.cardPosition !== false) {
-        console.log(data.cardPosition);
         cardPosition = data.cardPosition;
       } else if (player.cards[cardPosition] !== cards.face_down.source) {
         cardPosition = 1;

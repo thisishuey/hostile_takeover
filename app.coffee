@@ -69,7 +69,6 @@ io.sockets.on 'connection', (socket) ->
 			card = cards[data.cardIndex]
 			cardPosition = 0
 			if data.cardPosition isnt no
-				console.log(data.cardPosition)
 				cardPosition = data.cardPosition
 			else if player.cards[cardPosition] isnt cards.face_down.source
 				cardPosition = 1
